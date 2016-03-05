@@ -37,7 +37,7 @@ Without using tails:
 > combinations''' _ [] = [[]]
 > combinations''' 0 _  = [[]]
 > combinations''' n xs 
->   = [ (xs !! i) : x | i <- [0.. (length xs)-1]
+>   = [ (xs !! i) : x | i <- [0 .. (length xs)-1]
 >                     , x <- combinations''' (n-1) (drop (i+1) xs)]
 
 Using subsequences in Data.List, but this is super slow:
@@ -45,8 +45,6 @@ Using subsequences in Data.List, but this is super slow:
 > combinations4 :: Int -> [a] -> [[a]]
 > combinations4 k ns = filter ((k==) . length) (subsequences ns)
 
-
-  
   *Prob26> combinations 3 [1..100]
   (9.99 secs, 1,730,114,288 bytes)
   *Prob26> combinations' 3 [1..100]
