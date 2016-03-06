@@ -19,7 +19,8 @@ http://qiita.com/bra_cat_ket/items/6a99a9b01682886607d0
 >   | x == y = diff xs ys
 >   | x >  y = diff xx ys
 
-> primes, nonPrimes :: [Integer]
+> -- primes, nonPrimes :: [Integer]
+> primes, nonPrimes :: Integral a => [a]
 > primes = 2:3:5: (diff [7,9..] nonPrimes)
 > nonPrimes = foldr1 merge' $ map helper $ tail primes
 >   where
@@ -29,7 +30,8 @@ http://qiita.com/bra_cat_ket/items/6a99a9b01682886607d0
   *Prob31> 7917 `elem` takeWhile (<7919) primes
   False
 
-> isPrime :: Integer -> Bool
+> -- isPrime :: Integer -> Bool
+> isPrime :: Integral a => a -> Bool
 > -- isPrime n 
 > --   | odd n     = n `elem` takeWhile (< n+2) primes
 > --   | otherwise = False
@@ -61,7 +63,8 @@ In addition, all we have to do is to check whether the input n has its factor up
 
 The following is, on the other hand, super slow.
 
-> primes' :: [Integer]
+> -- primes' :: [Integer]
+> primes' :: Integral a => [a]
 > primes' = 2 : [n| n<-[3,5..], isPrime' n] 
 
   *Prob31> isPrime 982451653
