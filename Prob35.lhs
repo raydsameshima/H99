@@ -15,6 +15,7 @@ Determine the prime factors of a given positive integer. Construct a flat list c
 > primeFactors :: Integral a => a -> [a]
 > primeFactors n = helper n primes []
 >
+> helper :: Integral a => a -> [a] -> [a] -> [a]
 > helper n pList@(p:ps) factors
 >   | n == 1        = factors
 >   | n `divides` p = helper n' pList (p:factors)
@@ -23,3 +24,17 @@ Determine the prime factors of a given positive integer. Construct a flat list c
 
   *Prob35> primeFactors 315
   [7,5,3,3]
+
+> primeFactors' :: Integral a => a -> [a]
+> primeFactors' n = let
+>   helper' n pList@(p:ps) factors
+>     | n == 1        = factors
+>     | n `divides` p = p : (helper' n' pList factors)
+>     | otherwise     = helper' n ps factors
+>     where n' = n `div` p
+>   in
+>     helper' n primes []
+
+  *Prob35> primeFactors' 315
+  [3,3,5,7]
+

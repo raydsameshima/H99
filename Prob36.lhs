@@ -5,7 +5,7 @@ Prob36.lhs
 Determine the prime factors of a given positive integer.
 Construct a list containing the prime factors and their multiplicity.
 
-> import Prob35 (primeFactors)
+> import Prob35 (primeFactors, primeFactors')
 > import Data.List (group)
 
   *Prob36> Data.List.group $ primeFactors 315
@@ -26,3 +26,14 @@ Construct a list containing the prime factors and their multiplicity.
 >     factors  = primeFactors n
 >     factors' = map head $ group $ factors 
 >     powers  = map length $ group $ factors 
+
+> primeFactorsMult' :: Integral a => a -> [(a, Int)]
+> primeFactorsMult' n = zip factors' powers
+>   where
+>     factors  = primeFactors' n
+>     factors' = map head $ group $ factors 
+>     powers  = map length $ group $ factors 
+
+  *Prob36> primeFactorsMult' 315
+  [(3,2),(5,1),(7,1)]
+

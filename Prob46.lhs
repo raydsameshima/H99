@@ -14,6 +14,13 @@ Now, write a predicate table/3 which prints the truth table of a given logical e
   False True False
   False False False
 
+> infixl 4 `or'`
+> infixl 4 `nor'`
+> infixl 5 `xor'`
+> infixl 6 `and'`
+> infixl 6 `nand'`
+> infixl 3 `equ`
+
 > and', or' :: Bool -> Bool -> Bool
 > and' True  True  = True
 > and' _     _     = False
@@ -37,7 +44,12 @@ Now, write a predicate table/3 which prints the truth table of a given logical e
 > False `impl` _ = True
 
 > equ :: (Bool -> Bool) -> (Bool -> Bool) -> Bool
-> equ bf1 bf2 = foldl and' True [bf1 x == bf2 x| x <- [True, False]] 
+> equ bf1 bf2 = foldr and' True [bf1 x == bf2 x| x <- [True, False]] 
+
+  *Prob46> equ not' (not' . not' . not')
+  True
+  *Prob46> equ id (not' . not')
+  True
 
   *Prob46> :t print 
   print :: Show a => a -> IO ()
@@ -49,4 +61,10 @@ Now, write a predicate table/3 which prints the truth table of a given logical e
   "True False"
   *Prob46> putStrLn $ show True ++ " " ++ show False
   True False
+
+> table :: (Bool -> Bool -> Bool) -- Boolean function
+>          -> IO ()
+> table bf = mapM_ putStrLn 
+>   [ show a ++ " " ++ show b ++ " " ++ show (bf a b) 
+>   | a <- [True, False], b <- [True, False]]
 
