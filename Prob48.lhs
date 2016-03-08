@@ -31,6 +31,8 @@ Define table/2 in a way that table(List,Expr) prints the truth table for the exp
 > import Prob46
 > import Control.Monad (replicateM)
 
+Trial-generalized-boolean function:
+
 > gbf :: [Bool] -> Bool
 > gbf _ = True
 
@@ -43,6 +45,8 @@ Define table/2 in a way that table(List,Expr) prints the truth table for the exp
 >     toStr = unwords . map (\x -> show x ++ space x)
 >     space True = "  "
 >     space False = " "
+
+To replace args n,
 
 > bTable :: Int -> [[Bool]]
 > bTable 0 = []
