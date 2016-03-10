@@ -21,8 +21,6 @@ http://www.snap-tck.com/room03/c02/comp/comp032.html
 >   | Node Int (HTree a) (HTree a)
 >   deriving (Show)
 
-OK, we have a data type for Huffman tree, and hSort:
-
 > hSort :: [(a, Int)] -> [(a, Int)]
 > hSort [] = []
 > hSort ((c,n):rest) = smaller ++ ((c,n):greater)
@@ -46,23 +44,23 @@ OK, we have a data type for Huffman tree, and hSort:
 > weight (Node n _ _) = n
 
 > fromList :: [(a,Int)] -> HTree a
-> fromList = fromList' . sort' . converter
+> fromList = fromList' . converter . hSort
 
 > fromList' :: [HTree a] -> HTree a
-> fromList' [l] = l
-> fromList' [l1,l2] 
->   | n1 <= n2  = Node (n1+n2) l1 l2
->   | otherwise = Node (n1+n2) l2 l1
->   where
+> fromList' [l1,l2] = Node (n1+n2) l1 l2
+>   where -- They are sorted.
 >     n1 = weight l1
 >     n2 = weight l2
-> fromList' (l1:l2:rest) = fromList' $ sort' ((fromList' [l1,l2]) : rest) 
->
-> sort' [] = []
-> sort' (l1:rest) = sm ++ (l1:gt)
+> fromList' (l1:l2:rest) 
+>   = fromList' $ sort' ((fromList' [l1,l2]) : rest) 
 >   where
->     sm = sort' [l | l <- rest, weight l <= weight l1]
->     gt = sort' [l | l <- rest, weight l >  weight l1]
+>     sort' :: [HTree a] -> [HTree a]
+>     sort' [] = []
+>     sort' (l1':rest) = sm ++ (l1':gt)
+>       where -- they are already sorted, so just insert it.
+>         sm = [l | l <- rest, weight l <= weight l1']
+>         gt = [l | l <- rest, weight l >  weight l1']
 
   *Ptob50> fromList [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
   Node 100 (Leaf ('a',45)) (Node 55 (Node 25 (Leaf ('c',12)) (Leaf ('b',13))) (Node 30 (Node 14 (Leaf ('f',5)) (Leaf ('e',9))) (Leaf ('d',16))))
+
