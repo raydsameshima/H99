@@ -16,17 +16,12 @@ The task shall be performed by the predicate huffman/2 defined as follows:
 see
 http://www.snap-tck.com/room03/c02/comp/comp032.html
 
-> data HufTree a = Leaf (a, Int)
->                  | Node Int (HufTree a) (HufTree a)
->                  deriving (Show)
+> data HTree a 
+>   = Leaf (a, Int)
+>   | Node Int (HTree a) (HTree a)
+>   deriving (Show)
 
-> fromList :: [(a,Int)] -- sorted 
->          -> HufTree a
-> fromList = fromList' . hSort
->
-> fromList' :: [(a,Int)] -> HufTree a
-> fromList' [(c,n),(d,m)] = Node (n+m) (Leaf (d,m)) (Leaf (c,n))
-> fromList' lst = undefined
+OK, we have a data type for Huffman tree, and hSort:
 
 > hSort :: [(a, Int)] -> [(a, Int)]
 > hSort [] = []
@@ -35,12 +30,39 @@ http://www.snap-tck.com/room03/c02/comp/comp032.html
 >     smaller = hSort [(d,m) | (d,m) <- rest, m <= n]
 >     greater = hSort [(d,m) | (d,m) <- rest, m >  n]
 
-> huffman :: [(Char, Int)] -> [(Char, String)]
-> huffman = huffman' . hSort
+> converter :: [(a, Int)] -> [HTree a]
+> converter lst = map toLeaf lst
+>   where
+>     toLeaf :: (a, Int) -> HTree a
+>     toLeaf (c,n) = Leaf (c,n)     
 
-> huffman' :: [(Char, Int)]    -- already sorted
->          -> [(Char, String)]
-> huffman' [] = []
-> huffman' [(c,_)] = [(c,"0")]
-> huffman' [(c,n),(d,m)] = [(c,"0"), (d,"1")]
-> huffman' lst = undefined
+  *Ptob50> hSort [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
+  [('f',5),('e',9),('c',12),('b',13),('d',16),('a',45)]
+  *Ptob50> converter it
+  [Leaf ('f',5),Leaf ('e',9),Leaf ('c',12),Leaf ('b',13),Leaf ('d',16),Leaf ('a',45)]
+
+> weight :: HTree a -> Int
+> weight (Leaf (c,n)) = n
+> weight (Node n _ _) = n
+
+> fromList :: [(a,Int)] -> HTree a
+> fromList = fromList' . sort' . converter
+
+> fromList' :: [HTree a] -> HTree a
+> fromList' [l] = l
+> fromList' [l1,l2] 
+>   | n1 <= n2  = Node (n1+n2) l1 l2
+>   | otherwise = Node (n1+n2) l2 l1
+>   where
+>     n1 = weight l1
+>     n2 = weight l2
+> fromList' (l1:l2:rest) = fromList' $ sort' ((fromList' [l1,l2]) : rest) 
+>
+> sort' [] = []
+> sort' (l1:rest) = sm ++ (l1:gt)
+>   where
+>     sm = sort' [l | l <- rest, weight l <= weight l1]
+>     gt = sort' [l | l <- rest, weight l >  weight l1]
+
+  *Ptob50> fromList [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
+  Node 100 (Leaf ('a',45)) (Node 55 (Node 25 (Leaf ('c',12)) (Leaf ('b',13))) (Node 30 (Node 14 (Leaf ('f',5)) (Leaf ('e',9))) (Leaf ('d',16))))
