@@ -16,17 +16,17 @@ The task shall be performed by the predicate huffman/2 defined as follows:
 see
 http://www.snap-tck.com/room03/c02/comp/comp032.html
 
-> data HTree a 
+> data HTree a -- Huffman tree
 >   = Leaf (a, Int)
 >   | Node Int (HTree a) (HTree a)
 >   deriving (Show)
 
-> hSort :: [(a, Int)] -> [(a, Int)]
-> hSort [] = []
-> hSort ((c,n):rest) = smaller ++ ((c,n):greater)
->   where
->     smaller = hSort [(d,m) | (d,m) <- rest, m <= n]
->     greater = hSort [(d,m) | (d,m) <- rest, m >  n]
+> sortByFreq :: [(a, Int)] -> [(a, Int)]
+> sortByFreq [] = []
+> sortByFreq ((c,n):rest) = smaller ++ ((c,n):greater)
+>   where -- For input, quick sort
+>     smaller = sortByFreq [(d,m) | (d,m) <- rest, m <= n]
+>     greater = sortByFreq [(d,m) | (d,m) <- rest, m >  n]
 
 > converter :: [(a, Int)] -> [HTree a]
 > converter lst = map toLeaf lst
@@ -34,7 +34,7 @@ http://www.snap-tck.com/room03/c02/comp/comp032.html
 >     toLeaf :: (a, Int) -> HTree a
 >     toLeaf (c,n) = Leaf (c,n)     
 
-  *Ptob50> hSort [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
+  *Ptob50> sortByFreq [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
   [('f',5),('e',9),('c',12),('b',13),('d',16),('a',45)]
   *Ptob50> converter it
   [Leaf ('f',5),Leaf ('e',9),Leaf ('c',12),Leaf ('b',13),Leaf ('d',16),Leaf ('a',45)]
@@ -44,7 +44,7 @@ http://www.snap-tck.com/room03/c02/comp/comp032.html
 > weight (Node n _ _) = n
 
 > fromList :: [(a,Int)] -> HTree a
-> fromList = fromList' . converter . hSort
+> fromList = fromList' . converter . sortByFreq
 
 > fromList' :: [HTree a] -> HTree a
 > fromList' [l1,l2] = Node (n1+n2) l1 l2
@@ -57,10 +57,42 @@ http://www.snap-tck.com/room03/c02/comp/comp032.html
 >     sort' :: [HTree a] -> [HTree a]
 >     sort' [] = []
 >     sort' (l1':rest) = sm ++ (l1':gt)
->       where -- they are already sorted, so just insert it.
+>       where -- They are already sorted, so just insert our pivot.
 >         sm = [l | l <- rest, weight l <= weight l1']
 >         gt = [l | l <- rest, weight l >  weight l1']
 
+We have a Huffman tree:
   *Ptob50> fromList [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
-  Node 100 (Leaf ('a',45)) (Node 55 (Node 25 (Leaf ('c',12)) (Leaf ('b',13))) (Node 30 (Node 14 (Leaf ('f',5)) (Leaf ('e',9))) (Leaf ('d',16))))
+  Node 100 (Leaf ('a',45)) 
+           (Node 55 (Node 25 (Leaf ('c',12)) 
+                             (Leaf ('b',13))) 
+                    (Node 30 (Node 14 (Leaf ('f',5)) 
+                                      (Leaf ('e',9))) 
+                             (Leaf ('d',16))))
 
+> huffman' :: HTree a -> [(a,String)]
+> huffman' (Leaf (c,_)) = [(c,"")]
+> huffman' (Node _ (Leaf l1@(c1,_)) node2) 
+>   = (c1, "0"):(map (helper '1') $ huffman' node2) 
+> huffman' (Node _ node1             (Leaf l2@(c2,_)))
+>   = (map (helper '0') $ huffman' node1) ++ [(c2,"1")] 
+> huffman' (Node _ node1 node2)
+>   = (map (helper '0') $ huffman' node1) 
+>   ++ (map (helper '1') $ huffman' node2)
+>
+> helper :: Char -> (a, String) -> (a, String)
+> helper n (c,nums) = (c, n:nums)
+
+> huffman :: (Ord a) => [(a,Int)] -> [(a,String)]
+> huffman = sortByA . huffman' . fromList . sortByFreq 
+>
+> sortByA :: (Ord a) => [(a,b)] -> [(a,b)]
+> sortByA [] = []
+> sortByA (c:cs) = sm ++ (c:gt)
+>   where
+>     sm = sortByA [d|d <- cs, (fst d) < (fst c)]
+>     gt = sortByA [d|d <- cs, (fst d) > (fst c)]
+>        
+  
+  *Ptob50> huffman [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
+  [('a',"0"),('b',"101"),('c',"100"),('d',"111"),('e',"1101"),('f',"1100")]
