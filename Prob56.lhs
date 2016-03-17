@@ -13,9 +13,8 @@ We are only interested in the structure, not in the contents of the nodes.
 >
 > isMir :: Tree a -> Tree a -> Bool
 > isMir Empty Empty = True
-> isMir (Branch _ l1 r1) (Branch _ l2 r2) 
->                   = (l1 `isMir` r2) && (r1 `isMir` l2)
-> isMir _ _ =        False
+> isMir (Branch _ l1 r1) (Branch _ l2 r2) = (l1 `isMir` r2) && (r1 `isMir` l2)
+> isMir _     _     = False
 
 > isSym :: Tree a -> Bool
 > isSym Empty = True
