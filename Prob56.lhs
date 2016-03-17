@@ -20,3 +20,8 @@ We are only interested in the structure, not in the contents of the nodes.
 > isSym Empty = True
 > isSym (Branch _ left right) = left `isMir` right
 > -- isSym t = t `isMir` t
+
+  *Prob56> isSym (Branch 'x' (Branch 'x' Empty Empty) Empty)
+  False
+  *Prob56> isSym (Branch 'x' (Branch 'x' Empty Empty) (Branch 'x' Empty Empty))
+  True

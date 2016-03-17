@@ -37,3 +37,10 @@ From the solution,
 > 
 > construct :: (Ord a) => [a] -> Tree a
 > construct xs = foldl (flip add2Tree) Empty xs
+
+  *Prob57> isSym . consTree $ [5, 3, 18, 1, 4, 12, 21]
+  True
+  *Prob57> isSym . consTree $ [3, 2, 5, 7, 1]
+  True
+  *Prob57> consTree [3, 2, 5, 7, 1] == construct [3, 2, 5, 7, 1]
+  True
