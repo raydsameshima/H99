@@ -13,8 +13,8 @@ Use the predicate add/3, developed in chapter 4 of the course, to write a predic
 > consTree [] = Empty
 > consTree (n:ns) = Branch n left right
 >   where
->     left  = consTree [m| m <- ns, m <  n]
->     right = consTree [m| m <- ns, m >  n]
+>     left  = consTree [m| m <- ns, m < n]
+>     right = consTree [m| m <- ns, m > n]
 
   *Prob57> consTree [3,2,5,7,1]
   Branch 3 (Branch 2 (Branch 1 Empty Empty) Empty) (Branch 5 Empty (Branch 7 Empty Empty))
