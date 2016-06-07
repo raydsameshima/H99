@@ -9,6 +9,7 @@ What is the maximum number of nodes it can contain?
 
 Clearly, MaxN = 2**H - 1. 
 However, what is the minimum number MinN? 
+
 This question is more difficult. 
 Try to find a recursive statement and turn it into a function minNodes that returns the minimum number of nodes in a height-balanced binary tree of height H. 
 On the other hand, we might ask: what is the maximum height H a height-balanced binary tree with N nodes can have? 
