@@ -16,9 +16,10 @@ Put the letter 'x' as information into all nodes of the tree.
 > cbalTree :: Int -> [Tree Char]
 > cbalTree 0 = [Empty] -- base case
 > cbalTree n = let (q, r) = (n-1) `quotRem` 2 -- n-1 = 2*q + r
->   in [Branch 'x' left right | i     <- [q .. q+r],
->                               left  <- cbalTree i,
->                               right <- cbalTree (n-1 -i)]
+>   in [Branch 'x' left right 
+>      | i     <- [q .. q+r], -- r is 0 or 1
+>        left  <- cbalTree i,
+>        right <- cbalTree (n-1 -i)]
 
   *Prob55> map (length . cbalTree) [1..17]
   [1,2,1,4,4,4,1,8,16,32,16,32,16,8,1,16,64]
