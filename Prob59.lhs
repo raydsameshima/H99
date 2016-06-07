@@ -28,10 +28,10 @@ Construct a list of all height-balanced binary trees with the given element and 
 > hbalTree :: a -> Int -> [Tree a]
 > hbalTree x 0 = [Empty]
 > hbalTree x 1 = [Branch x Empty Empty]
-> hbalTree x n =
+> hbalTree x h =
 >   [ Branch x l r
->   | (nl, nr) <- [(n-2,n-1),(n-1,n-1),(n-1,n-2)]
->   , l <- hbalTree x nl, r <- hbalTree x nr ]
+>   | (hl, hr) <- [(h-2,h-1),(h-1,h-1),(h-1,h-2)] -- this guarantees height-balanced
+>   , l <- hbalTree x hl, r <- hbalTree x hr ]
 
   *Prob59> take 4 $ hbalTree 'x' 3
   [Branch 'x' (Branch 'x' Empty Empty) 
@@ -43,3 +43,16 @@ Construct a list of all height-balanced binary trees with the given element and 
   ,Branch 'x' (Branch 'x' Empty (Branch 'x' Empty Empty)) 
               (Branch 'x' Empty (Branch 'x' Empty Empty))
   ]
+
+If we want to avoid recomputing lists of trees (at the cost of extra space), we can use a similar structure to the common method for computation of all the Fibonacci numbers:
+
+
+> hbalTree' x h = trees !! h
+>   where
+>     trees = [Empty] : [Branch x Empty Empty] :
+>             zipWith combine (tail trees) trees -- this tail is safe.
+>     combine ts shortts = 
+>       [ Branch x l r
+>       | (ls, rs) <- [(shortts, ts), (ts, ts), (ts, shortts)]
+>       , l <- ls, r <- rs ]                   
+
