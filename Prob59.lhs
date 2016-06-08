@@ -13,15 +13,14 @@ Construct a list of all height-balanced binary trees with the given element and 
 >
 > something :: [Tree Char]
 > something =
->   [
->     Branch 'x' (Branch 'x' Empty Empty) 
->                (Branch 'x' Empty (Branch 'x' Empty Empty)),
->     Branch 'x' (Branch 'x' Empty Empty) 
->                (Branch 'x' (Branch 'x' Empty Empty) Empty),
->     Branch 'x' (Branch 'x' Empty Empty) 
+>   [ Branch 'x' (Branch 'x' Empty Empty) 
+>                (Branch 'x' Empty (Branch 'x' Empty Empty))
+>   , Branch 'x' (Branch 'x' Empty Empty) 
+>                (Branch 'x' (Branch 'x' Empty Empty) Empty)
+>   , Branch 'x' (Branch 'x' Empty Empty) 
 >                (Branch 'x' (Branch 'x' Empty Empty) 
->                            (Branch 'x' Empty Empty)),
->     Branch 'x' (Branch 'x' Empty (Branch 'x' Empty Empty)) 
+>                            (Branch 'x' Empty Empty))
+>   , Branch 'x' (Branch 'x' Empty (Branch 'x' Empty Empty)) 
 >                (Branch 'x' Empty Empty)
 >   ]
 
@@ -30,7 +29,7 @@ Construct a list of all height-balanced binary trees with the given element and 
 > hbalTree x 1 = [Branch x Empty Empty]
 > hbalTree x h =
 >   [ Branch x l r
->   | (hl, hr) <- [(h-2,h-1),(h-1,h-1),(h-1,h-2)] -- this guarantees height-balanced
+>   | (hl,hr) <- [(h-2,h-1),(h-1,h-1),(h-1,h-2)] -- height-balanced
 >   , l <- hbalTree x hl, r <- hbalTree x hr ]
 
   *Prob59> take 4 $ hbalTree 'x' 3

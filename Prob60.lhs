@@ -22,9 +22,25 @@ example in Haskell:
 *Main> length $ hbalTreeNodes 'x' 15
 1553
 *Main> map (hbalTreeNodes 'x') [0..3]
-[[Empty],
- [Branch 'x' Empty Empty],
- [Branch 'x' Empty (Branch 'x' Empty Empty),Branch 'x' (Branch 'x' Empty Empty) Empty],
- [Branch 'x' (Branch 'x' Empty Empty) (Branch 'x' Empty Empty)]]
+[ [Empty]                              -- 0
+, [Branch 'x' Empty Empty]             -- 1
+, [Branch 'x' Empty                    -- 2
+              (Branch 'x' Empty Empty)
+  ,Branch 'x' (Branch 'x' Empty Empty) 
+              Empty
+  ]
+, [Branch 'x' (Branch 'x' Empty Empty) -- 3
+              (Branch 'x' Empty Empty)
+  ]
+]
 
+Maximum number of nodes in a height-balanced tree of height h.
+1, 2, 4, 8, ...
 
+> maxNodes :: Int -> Int
+> maxNodes h = 2^h -1
+
+Minimum height of a weight-balanced tree of n nodes.
+
+> minHeight :: Int -> Int
+> minHeight n = ceiling $ logBase 2 $ fromIntegral (n+1) 
