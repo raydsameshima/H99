@@ -14,4 +14,16 @@ Apply the generate-and-test paradigm to construct all symmetric, completely bala
 > symCbalTrees n = filter isSym (cbalTree n)
 
   *Prob58> symCbalTrees 5
-  [Branch 'x' (Branch 'x' Empty (Branch 'x' Empty Empty)) (Branch 'x' (Branch 'x' Empty Empty) Empty),Branch 'x' (Branch 'x' (Branch 'x' Empty Empty) Empty) (Branch 'x' Empty (Branch 'x' Empty Empty))]
+  [Branch 'x' (Branch 'x' Empty 
+                          (Branch 'x' Empty Empty)
+              ) 
+              (Branch 'x' (Branch 'x' Empty Empty) 
+                           Empty
+              )
+  ,Branch 'x' (Branch 'x' (Branch 'x' Empty Empty) 
+                          Empty
+              ) 
+              (Branch 'x' Empty 
+                          (Branch 'x' Empty Empty)
+              )
+  ]

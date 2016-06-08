@@ -14,12 +14,23 @@ Put the letter 'x' as information into all nodes of the tree.
 > import Prob54 (Tree(..))
 
 > cbalTree :: Int -> [Tree Char]
-> cbalTree 0 = [Empty] -- base case
+> cbalTree 0 = [Empty]                        -- base case
 > cbalTree n = let (q, r) = (n-1) `quotRem` 2 -- n-1 = 2*q + r
->   in [Branch 'x' left right 
->      | i     <- [q .. q+r], -- r is 0 or 1
->        left  <- cbalTree i,
->        right <- cbalTree (n-1 -i)]
+>   in [ Branch 'x' left right 
+>      | i     <- [q .. q+r]                  -- r is 0 or 1
+>      , left  <- cbalTree i                  -- i is q or (q or q+1)
+>      , right <- cbalTree (n-1 -i)]
+
+  *Prob55> cbalTree 4
+  [Branch 'x' (Branch 'x' Empty Empty) 
+              (Branch 'x' Empty (Branch 'x' Empty Empty))
+  ,Branch 'x' (Branch 'x' Empty Empty) 
+              (Branch 'x' (Branch 'x' Empty Empty) Empty)
+  ,Branch 'x' (Branch 'x' Empty (Branch 'x' Empty Empty)) 
+              (Branch 'x' Empty Empty)
+  ,Branch 'x' (Branch 'x' (Branch 'x' Empty Empty) Empty) 
+              (Branch 'x' Empty Empty)
+  ]
 
   *Prob55> map (length . cbalTree) [1..17]
   [1,2,1,4,4,4,1,8,16,32,16,32,16,8,1,16,64]
@@ -30,6 +41,26 @@ Next, by dividing we get
 If r=0, then i=q, and both left and right sub-trees has q x's.
 Else if r=1, we have two choices for sub-trees: 
   (i,(n-1)-i) = (q, q+1) or (q+1,q)
+
+This is the implementation of "from left":
+
+> cbalTree' :: Int -> [Tree Char]
+> cbalTree' 0 = [Empty]
+> cbalTree' n = let (q,r) = ((n-1) `quot` 2, (n-1) `rem` 2) in
+>   [ Branch 'x' l r
+>   | i <- [q .. q+r]
+>   , r <- cbalTree' i
+>   , l <- cbalTree' (n-i-1)]
+
+  [Branch 'x' (Branch 'x' (Branch 'x' Empty Empty) Empty) 
+              (Branch 'x' Empty Empty)
+  ,Branch 'x' (Branch 'x' Empty (Branch 'x' Empty Empty)) 
+              (Branch 'x' Empty Empty)
+  ,Branch 'x' (Branch 'x' Empty Empty) 
+              (Branch 'x' (Branch 'x' Empty Empty) Empty)
+  ,Branch 'x' (Branch 'x' Empty Empty) 
+              (Branch 'x' Empty (Branch 'x' Empty Empty))
+  ]
 
 A slightly more efficient version of this solution, which never creates the same tree twice:
 

@@ -17,11 +17,21 @@ Use the predicate add/3, developed in chapter 4 of the course, to write a predic
 >     right = consTree [m| m <- ns, m > n]
 
   *Prob57> consTree [3,2,5,7,1]
-  Branch 3 (Branch 2 (Branch 1 Empty Empty) Empty) (Branch 5 Empty (Branch 7 Empty Empty))
+  Branch 3 (Branch 2 (Branch 1 Empty Empty) 
+                     Empty
+           ) 
+           (Branch 5 Empty 
+                     (Branch 7 Empty Empty)
+           )
   *Prob57> isSym it
   True
   *Prob57> consTree [5,3,18,1,4,12,21]
-  Branch 5 (Branch 3 (Branch 1 Empty Empty) (Branch 4 Empty Empty)) (Branch 18 (Branch 12 Empty Empty) (Branch 21 Empty Empty))
+  Branch 5 (Branch 3 (Branch 1 Empty Empty) 
+                     (Branch 4 Empty Empty)
+           ) 
+           (Branch 18 (Branch 12 Empty Empty) 
+                      (Branch 21 Empty Empty)
+           )
   *Prob57> isSym it
   True
 
