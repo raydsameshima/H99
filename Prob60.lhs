@@ -74,8 +74,8 @@ Here we plant the trees we want.
 >     baltree h n =
 >       [ Branch x l r 
 >       | (hl,hr) <- [(h-2,h-1),(h-1,h-1),(h-1,h-2)]
->       , let min_nl = min (minNodes hl) (n-1- (maxNodes hr))
->       , let max_nl = max (minNodes hl) (n-1- (maxNodes hr))
+>       , let min_nl = max (minNodes hl) (n-1- (maxNodes hr))
+>       , let max_nl = min (minNodes hl) (n-1- (maxNodes hr))
 >       , nl <- [min_nl .. max_nl]
 >       , let nr = n-1-nl
 >       , l <- baltree hl nl
