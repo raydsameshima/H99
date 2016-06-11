@@ -1,16 +1,17 @@
 Prob59.lhs
 
 > module Prob59 where
+> import Prob54(Tree(..))
 
 Construct height-balanced binary trees
 
 In a height-balanced binary tree, the following property holds for every node: 
-The height of its left subtree and the height of its right subtree are almost equal, which means their difference is not greater than one.
+The height of its left subtree and the height of its right subtree are 
+  almost equal, 
+which means their difference is not greater than one.
 
 Construct a list of all height-balanced binary trees with the given element and the given maximum height.
 
-> import Prob54(Tree(..))
->
 > something :: [Tree Char]
 > something =
 >   [ Branch 'x' (Branch 'x' Empty Empty) 
@@ -23,7 +24,7 @@ Construct a list of all height-balanced binary trees with the given element and 
 >   , Branch 'x' (Branch 'x' Empty (Branch 'x' Empty Empty)) 
 >                (Branch 'x' Empty Empty)
 >   ]
-
+> -- h :: Int is the height.
 > hbalTree :: a -> Int -> [Tree a]
 > hbalTree x 0 = [Empty]
 > hbalTree x 1 = [Branch x Empty Empty]
