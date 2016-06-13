@@ -31,7 +31,9 @@ Construct a list of all height-balanced binary trees with the given element and 
 > hbalTree x h =
 >   [ Branch x l r
 >   | (hl,hr) <- [(h-2,h-1),(h-1,h-1),(h-1,h-2)] -- height-balanced
->   , l <- hbalTree x hl, r <- hbalTree x hr ]
+>   , l <- hbalTree x hl
+>   , r <- hbalTree x hr
+>   ]
 
   *Prob59> take 4 $ hbalTree 'x' 3
   [Branch 'x' (Branch 'x' Empty Empty) 
@@ -51,7 +53,7 @@ If we want to avoid recomputing lists of trees (at the cost of extra space), we 
 >   where
 >     trees = [Empty] : [Branch x Empty Empty] :
 >             zipWith combine (tail trees) trees -- this tail is safe.
->     combine ts shortts = 
+>     combine shortts ts = 
 >       [ Branch x l r
 >       | (ls, rs) <- [(shortts, ts), (ts, ts), (ts, shortts)]
 >       , l <- ls, r <- rs ]                   
