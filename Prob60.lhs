@@ -4,8 +4,8 @@ Prob60.lhs
 >
 > import Prob54 (Tree(..))
 > import Prob59 (hbalTree)
-> import Data.Maybe (fromJust) -- fromJust :: Maybe a -> a
-> import Data.List (findIndex) -- findIndex :: (a -> Bool) -> [a] -> Maybe Int
+> import Data.Maybe (fromJust) -- :: Maybe a -> a
+> import Data.List (findIndex) -- :: (a -> Bool) -> [a] -> Maybe Int
 
 Construct height-balanced binary trees with a given number of nodes.
 
@@ -28,7 +28,7 @@ An example of height-blanced tree of 16 nodes:
         2             3          h=2
     04     06     05     07      h=3
   08  12 10  14 09  13 11  15    h=4
-16            ...            31  h=5
+16.                              h=5
 
 example in Haskell:
   *Main> length $ hbalTreeNodes 'x' 15
