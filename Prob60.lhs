@@ -4,8 +4,8 @@ Prob60.lhs
 >
 > import Prob54 (Tree(..))
 > import Prob59 (hbalTree)
-> import Data.Maybe (fromJust)
-> import Data.List (findIndex)
+> import Data.Maybe (fromJust) -- fromJust :: Maybe a -> a
+> import Data.List (findIndex) -- findIndex :: (a -> Bool) -> [a] -> Maybe Int
 
 Construct height-balanced binary trees with a given number of nodes.
 
@@ -23,6 +23,7 @@ Write a function maxHeight that computes this.
 Now, we can attack the main problem: construct all the height-balanced binary trees with a given number of nodes. 
 Find out how many height-balanced trees exist for n = 15.
 
+An example of height-blanced tree of 16 nodes:
                1                 h=1
         2             3          h=2
     04     06     05     07      h=3
