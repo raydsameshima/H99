@@ -51,19 +51,21 @@ example in Haskell:
 > hbalTreeNodes :: a -> Int -> [Tree a]
 > hbalTreeNodes _ 0 = [Empty]
 > hbalTreeNodes x n = concatMap toFilteredTrees [minHeight .. maxHeight]
->   where
->     toFilteredTrees = filter ((n ==) . countNodes) . hbalTree x
-> 
->     -- Similar to the Fibonacci sequence but adds 1 in each step.
->     minNodesSeq = 0:1:zipWith ((+).(1+)) minNodesSeq (tail minNodesSeq)
->     minNodes = (minNodesSeq !!)
-> 
+>   where 
+>     -- concatMap :: Foldable t => (a -> [b]) -> t a -> [b]
+>     toFilteredTrees h = filter ((n ==) . countNodes) $ hbalTree x h
+>
 >     minHeight = ceiling $ logBase 2 $ fromIntegral (n+1)
->     maxHeight = (fromJust $ findIndex (>n) minNodesSeq) - 1
+>     maxHeight = (fromJust $ findIndex (> n) minNodesSeq) - 1
 > 
->     countNodes Empty = 0
->     countNodes (Branch _ l r) = countNodes l + countNodes r + 1
-
+> countNodes :: Tree a -> Int
+> countNodes Empty = 0
+> countNodes (Branch _ l r) = (countNodes l) + (countNodes r) + 1
+>
+> -- Similar to the Fibonacci sequence but adds 1 in each step.
+> minNodesSeq = 0:1:zipWith ((+).(1+)) minNodesSeq (tail minNodesSeq) -- [0,1,2,4,7,12,20,33,54,88,143 ..
+> minNodes = (minNodesSeq !!)
+>
 
 
 
