@@ -11,13 +11,21 @@ Construct height-balanced binary trees with a given number of nodes.
 
 Consider a height-balanced binary tree of height h.
 What is the maximum number of nodes it can contain?
-
 Clearly, 
   max n = 2^h -1
+
 However, what is the minimum number (min n)? 
 
 This question is more difficult. 
 Try to find a recursive statement and turn it into a function minNodes that returns the minimum number of nodes in a height-balanced binary tree of height h. 
+
+> -- Similar to the Fibonacci sequence but adds 1 in each step.
+> minNodes :: Int 
+>          -> Int
+> minNodesSeq = 0:1:zipWith ((+).(1+)) minNodesSeq (tail minNodesSeq) 
+> --          = [0,1,2,4,7,12,20,33,54,88,143 ..
+> minNodes = (minNodesSeq !!)
+
 On the other hand, we might ask: what is the maximum height h a height-balanced binary tree with n nodes can have? 
 Write a function maxHeight that computes this.
 Now, we can attack the main problem: construct all the height-balanced binary trees with a given number of nodes. 
@@ -62,9 +70,6 @@ example in Haskell:
 > countNodes Empty = 0
 > countNodes (Branch _ l r) = (countNodes l) + (countNodes r) + 1
 >
-> -- Similar to the Fibonacci sequence but adds 1 in each step.
-> minNodesSeq = 0:1:zipWith ((+).(1+)) minNodesSeq (tail minNodesSeq) -- [0,1,2,4,7,12,20,33,54,88,143 ..
-> minNodes = (minNodesSeq !!)
 >
 
 
