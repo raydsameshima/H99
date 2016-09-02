@@ -2,6 +2,12 @@ Prob63.lhs
 
 > module Prob63 where
 > import Prob54(Tree(..))
+> import Prob62(atLevel)
+
+> tree4 = Branch 1 (Branch 2 Empty (Branch 4 Empty Empty))
+>                  (Branch 2 Empty Empty)
+> fullTree = Branch 1 (Branch 2 Empty Empty)
+>                     (Branch 2 Empty Empty)
 
 Construct a complete binary tree
 
@@ -18,6 +24,23 @@ The address of X's left and right successors are 2*A and 2*A+1, respectively, if
 This fact can be used to elegantly construct a complete binary tree structure.
 
 > completeBinaryTree = cbt 'x'
+>
 > cbt :: a -> Int -> Tree a
 > cbt = undefined
 
+> countDepth :: Tree a -> Int
+> countDepth Empty = 0
+> countDepth (Branch _ r l) = 1 + max (countDepth r) (countDepth l)
+>
+> isCompleteBinaryTree :: Tree a -> Bool
+> isCompleteBinaryTree tree = let d = countDepth tree in
+>   undefined
+>
+> isFullAt :: Tree a -> Int -> Bool
+> isFullAt t n 
+>   | n <= 0             = True
+>   | n > (countDepth t) = False
+>   | otherwise          = 2^(n-1) == length (atLevel t n)
+>
+> isFull :: Tree a -> Bool
+> isFull t = and [isFullAt t n| n <- [0.. (countDepth t)]]
