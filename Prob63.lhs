@@ -29,12 +29,11 @@ This fact can be used to elegantly construct a complete binary tree structure.
 > cbt = undefined
 
 > countDepth :: Tree a -> Int
-> countDepth Empty = 0
+> countDepth Empty          = 0
 > countDepth (Branch _ r l) = 1 + max (countDepth r) (countDepth l)
 >
 > isCompleteBinaryTree :: Tree a -> Bool
-> isCompleteBinaryTree tree = let d = countDepth tree in
->   undefined
+> isCompleteBinaryTree tree = undefined
 >
 > isFullAt :: Tree a -> Int -> Bool
 > isFullAt t n 
@@ -42,5 +41,5 @@ This fact can be used to elegantly construct a complete binary tree structure.
 >   | n > (countDepth t) = False
 >   | otherwise          = 2^(n-1) == length (atLevel t n)
 >
-> isFull :: Tree a -> Bool
-> isFull t = and [isFullAt t n| n <- [0.. (countDepth t)]]
+> isFull' :: Tree a -> Bool
+> isFull' t = and [isFullAt t n| n <- [0.. (countDepth t -1)]]
