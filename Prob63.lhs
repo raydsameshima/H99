@@ -41,5 +41,6 @@ This fact can be used to elegantly construct a complete binary tree structure.
 >   | n > (countDepth t) = False
 >   | otherwise          = 2^(n-1) == length (atLevel t n)
 >
-> isFull' :: Tree a -> Bool
-> isFull' t = and [isFullAt t n| n <- [0.. (countDepth t -1)]]
+> isFull :: Tree a -> Bool
+> isFull t = and [isFullAt t n| n <- [0.. (countDepth t)]]
+
