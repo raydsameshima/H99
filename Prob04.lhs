@@ -1,11 +1,14 @@
-prob04.lhs
+Prob04.lhs
+
+> module Prob04 where
 
 Find the number of elements of a list.
 
 > myLength :: [a] -> Int
 > myLength lst = myLength' lst 0 
->   where myLength' []     n = n
->         myLength' (_:xs) n = myLength' xs (n+1)
+>   where 
+>     myLength' []     n = n
+>     myLength' (_:xs) n = myLength' xs (n+1)
 
 This n is so-called the accumulator.
 
