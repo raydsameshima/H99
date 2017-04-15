@@ -23,3 +23,31 @@ Slightly modifed version of the solution.
     | p x        = dropWhile p xs'
     | otherwise  = xs
 
+This function is exactly Data.List.group:
+  
+  > Data.List.group ['a','a','a','a','b','c','c','a','a','d','e','e','e','e']
+  ["aaaa","b","cc","aa","d","eeee"]
+  > Data.List.group "Mississippi"
+  ["M","i","ss","i","ss","i","pp","i"]
+
+GHC's implementation:
+
+> myGroup :: (Eq a) => [a] -> [[a]]
+> myGroup = myGroupBy (==)
+>
+> myGroupBy :: (a -> a -> Bool) -> [a] -> [[a]]
+> myGroupBy _ []     = []
+> myGroupBy e (x:xs) = (x:ys) : myGroupBy e zs
+>   where
+>     (ys,zs) = mySpan (e x) xs
+>
+> mySpan :: (a -> Bool) -> [a] -> ([a],[a])
+> mySpan _ xs@[]     = (xs,xs) 
+> mySpan p xx@(x:xs)
+>   | p x       = (x:ys, zs)
+>   | otherwise = ([],xx)
+>   where
+>     (ys, zs) = span p xs 
+
+  *Main> myGroup "Mississippi"
+  ["M","i","ss","i","ss","i","pp","i"]
