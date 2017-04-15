@@ -7,8 +7,9 @@ Consecutive duplicates of elements are encoded as lists (N, E) where N is the nu
 > import Data.List (group)
 
 > encode :: Eq a => [a] -> [(Int, a)]
-> encode lst = map encode' (pack lst)
->   where encode' xx@(x:xs) = (length xx, x)
+> encode = map encode' . pack 
+>   where 
+>     encode' xx@(x:_) = (length xx, x)
 >
 > pack :: Eq a => [a] -> [[a]]
 > pack [] = []
