@@ -26,3 +26,6 @@ Or writing it pointfreestyle
 > encode' :: Eq a => [a] -> [(Int, a)]
 > encode' = map (\x -> (length x, head x)) . group
 
+> -- Using list comprehension.
+> encode'' :: Eq a => [a] -> [(Int, a)]
+> encode'' xs = [(length x, head x) | x <- group xs]
