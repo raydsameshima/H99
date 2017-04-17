@@ -9,23 +9,13 @@ Only elements with duplicates are transferred as (N, E) lists.
 To represent such the list as a Haskel (homogeneous) list, we have to make a new data structure:
 
 > import Data.List (group)
+> import Prob10 (encode)
 
-> data ListItem a = Multiple Int a 
->                 | Single a
->                 deriving (Show)
+> data ListItem a 
+>   = Multiple Int a -- more than twice
+>   | Single a
+>   deriving (Show)
 
-The following is basically the same as in prob10.lhs:
-
-> encode :: Eq a => [a] -> [(Int, a)]
-> encode lst = map encode' (pack lst)
->   where encode' xx@(x:xs) = (length xx, x)
-
-> pack :: Eq a => [a] -> [[a]]
-> pack [] = []
-> pack (x:xs) = (x:front) : pack rear
->   where front = takeWhile (== x) xs
->         rear  = dropWhile (== x) xs
->
 > listItemizer :: (Int, a) -> ListItem a
 > listItemizer (1, x) = Single x
 > listItemizer (n, x) = Multiple n x
@@ -50,6 +40,6 @@ This problem could also be solved using a list comprehension:
 > modifiedEncode xs = 
 >   [y | x <- group xs, 
 >        let y = if (length x) == 1
->                then Single (head x)
->                else Multiple (length x) (head x)
+>                  then Single (head x)
+>                  else Multiple (length x) (head x)
 >   ]
