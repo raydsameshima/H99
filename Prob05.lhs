@@ -27,8 +27,9 @@ Using accumulator, we can dramatically reduce the order from O(n^2) to O(n)!
 > myReverse' :: [a] -> [a]
 > myReverse' lst = myReverse' lst []
 >   where 
->     myReverse' []     tsl = tsl
->     myReverse' (x:xs) tsl = myReverse' xs (x:tsl)
+> --  myReverse' []     tsl = tsl
+> --  myReverse' (x:xs) tsl = myReverse' xs (x:tsl)
+>     myReverse' xs tsl = foldl (flip (:)) tsl xs
 
 This is so-called Bustall-Darlington transformation, see 4.1.5 of Algorithms: A Functional Programming Approach (Fethi Rabhi, Guy Lapalme).
 

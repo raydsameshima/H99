@@ -24,6 +24,7 @@ This n is so-called the accumulator.
 > myZipLength = fst . last . zip [1..] 
 
 > my1Length :: [a] -> Int
-> my1Length = sum . map (\_ -> 1)
+> -- my1Length = sum . map (\_ -> 1)
+> my1Length = sum . map (const 1)
 
 > my1Length' = sum . map (const 1)

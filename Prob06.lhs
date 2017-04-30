@@ -8,7 +8,7 @@ Find out whether a list is a palindrome.
 A palindrome can be read forward or backward; e.d. (xamax).
 
 > isPalindrome :: Eq a => [a] -> Bool
-> isPalindrome lst = (myReverse' lst == lst)
+> isPalindrome lst = myReverse' lst == lst
 
 myReverse is from prob05.lhs
 

@@ -25,6 +25,13 @@ Or writing it pointfreestyle
 
 > encode' :: Eq a => [a] -> [(Int, a)]
 > encode' = map (\x -> (length x, head x)) . group
+  
+  *Prob09> :!hlint Prob10.lhs
+  Prob10.lhs:27:18: Suggestion: Use &&&
+  Found:
+    \ x -> (length x, head x)
+  Why not:
+    length Control.Arrow.&&& head
 
 > -- Using list comprehension.
 > encode'' :: Eq a => [a] -> [(Int, a)]

@@ -55,3 +55,12 @@ The same rule holds for singleton list, and for longer list,
                    = 3
 
 > myLast''' = head . reverse
+  
+  rds:H99 rds$ hlint Prob01.lhs
+  Prob01.lhs:57:15: Warning: Use last
+  Found:
+    head . reverse
+  Why not:
+    last
+
+  1 hint
