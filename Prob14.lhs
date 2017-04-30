@@ -5,8 +5,9 @@ Prob14.lhs
 Duplicate the elements of a list.
 
 > dupli :: [a] -> [a]
-> dupli [] = []
-> dupli (x:xs) = [x,x] ++ (dupli xs)
+> -- dupli [] = []
+> -- dupli (x:xs) = [x,x] ++ (dupli xs)
+> dupli = foldr (\x -> (++) [x, x]) []
 
 > dupli' :: [a] -> [a]
 > dupli' [] = []
@@ -18,4 +19,4 @@ Or using the list monado:
 > dupli'' xs = xs >>= (\x -> [x,x])
 
 > dupli''' :: [a] -> [a]
-> dupli''' lst = [x| x<- lst, _ <- [1,2]]
+> dupli''' lst = [x| x <- lst, _ <- [1,2]]
