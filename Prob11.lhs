@@ -14,32 +14,42 @@ To represent such the list as a Haskel (homogeneous) list, we have to make a new
 > data ListItem a 
 >   = Multiple Int a -- more than twice
 >   | Single a
->   deriving (Show)
+>   deriving (Show, Eq)
 
-> listItemizer :: (Int, a) -> ListItem a
+> listItemizer 
+>   :: (Int, a) -> ListItem a
 > listItemizer (1, x) = Single x
 > listItemizer (n, x) = Multiple n x
 >
-> modefiedEncode :: Eq a => [a] -> [ListItem a]
-> modefiedEncode lst = map listItemizer (encode lst) 
+> modifiedEncode 
+>   :: Eq a => 
+>      [a] -> [ListItem a]
+> modifiedEncode = map listItemizer . encode
 
 Essentially the same way in the solution
 
-data ListeItem a = Single a | Multiple Int a
-  deriving (Show)
-
-encodeModefied :: Eq a => [a] -> [ListItem a]
-encodeModefied = map encodeHelper . encode
-  where encodeHelper (1,x) = Single x
-        encodeHelper (n,x) = Multiple n x
-
 The ListItem definition contains 'deriving (Show)' so that we can get interactive output.
 
-This problem could also be solved using a list comprehension:
+This problem could also be solved using list comprehension:
 
-> modifiedEncode xs = 
+> modifiedEncode' 
+>   :: Eq a => 
+>      [a] -> [ListItem a]
+> modifiedEncode' xs = 
 >   [y | x <- group xs, 
->        let y = if (length x) == 1
+>        let y = if length x == 1
 >                  then Single (head x)
 >                  else Multiple (length x) (head x)
 >   ]
+>
+> modifiedEncode'' 
+>   :: Eq a => 
+>      [a] -> [ListItem a]
+> modifiedEncode'' xs = [helper x | x <- group xs]
+>   where
+>     helper ts@(t:_) 
+>       = if length ts == 1
+>           then
+>             Single t
+>           else
+>             Multiple (length ts) t
