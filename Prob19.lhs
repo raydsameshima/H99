@@ -17,7 +17,6 @@ If n<0, convert the problem to the equivalent problem n>0 by adding the list's l
 >       where 
 >         rList = reverse xs 
 
-
 > -- rotate' xs n = take (length xs) $ drop (length xs + n) $ cycle xs
 
 Another implementation using split'' in Prob17:
@@ -29,3 +28,12 @@ Another implementation using split'' in Prob17:
 >   | otherwise = rotate'' lst (n + length lst)
 >   where 
 >     (first, second) = split'' lst n
+
+> rotate''' xs n
+>   | n < 0     = rotate''' xs (n+len)
+>   | n > len   = rotate''' xs (n-len)
+>   | otherwise = rear ++ front
+>   where
+>     (front, rear) = splitAt n xs
+>     len = length xs
+
