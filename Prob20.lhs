@@ -16,7 +16,8 @@ A simple recursice solution, without error handling:
 
 > removeAt' 
 >   :: Int -> [a] -> (a, [a])
-> removeAt' n | n < 1 = error "removeAt': negative input"
+> removeAt' n _ 
+>   | n < 1 = error "removeAt': negative input"
 > removeAt' 1 (x:xs) = (x, xs)
 > removeAt' n (x:xs) = (left, x:right)
 >   where 
