@@ -22,7 +22,10 @@ E.q.,
     = foldl (flip (:)) 3:2:1:[] []
     = [3,2,1]
 
-Using accumulator, we can dramatically reduce the order from O(n^2) to O(n)!
+As we can see easily, this implementation is O(n).
+
+How to make this implementation:
+Using accumulator, we can also dramatically reduce the order from O(n^2) to O(n)!
 
 > myReverse' :: [a] -> [a]
 > myReverse' lst = myReverse' lst []
@@ -33,3 +36,4 @@ Using accumulator, we can dramatically reduce the order from O(n^2) to O(n)!
 
 This is so-called Bustall-Darlington transformation, see 4.1.5 of Algorithms: A Functional Programming Approach (Fethi Rabhi, Guy Lapalme).
 
+This is exactly the same as our Prelude's one.

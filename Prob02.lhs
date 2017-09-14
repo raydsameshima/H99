@@ -14,7 +14,7 @@ Pattern match:
   *Main> head . tail $ "aiueo"
   'i'
 
-It is always good to use built in functions, but keep in mind that it might fail due to the emptylist.
+It is always good to use built-in functions, but keep in mind that it might fail due to the emptylist.
 
 > myButLast' :: [a] -> a
 > myButLast' = head . tail . reverse
