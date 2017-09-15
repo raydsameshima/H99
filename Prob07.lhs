@@ -15,7 +15,8 @@ Flatten a nested list structure.
   [1,2,3,4,5]
 
 
-We have to define a new data type, since lists in Haskell should be homogeneous.
+We have to define a new data type, since lists in Haskell should be 
+homogeneous.
 
 > data NestedList a 
 >   = Elem a 
@@ -26,7 +27,6 @@ We have to define a new data type, since lists in Haskell should be homogeneous.
 > myFlatten (List [])     = []
 > myFlatten (Elem x)      = [x]
 > myFlatten (List (x:xs)) = myFlatten x ++ myFlatten (List xs)
-> -- myFlatten (List [])     = []
 
 Just a copy and paste of the solutions.
 
@@ -42,11 +42,20 @@ If you know the Monad,
 
 > myFlatten'' :: NestedList a -> [a]
 > myFlatten'' (Elem x) = return x
-> -- myFlatten'' (List x) = myFlatten'' =<< x
 > myFlatten'' (List x) = x >>= myFlatten''
+> -- myFlatten'' (List x) = myFlatten'' =<< x
+
+Using 
+  foldr :: (a -> b -> b) -> b -> [a] -> b
+Note that, the universality of foldr is
+  g = foldr f v
+iff
+  g     [] = v
+  g (x:xs) = f x (g xs)
+("A tutorial on the universality and expressiveness of fold (G. Hutton))
 
   flatten3 :: NestedList a -> [a]
   flatten3 (Elem x ) = [x]
-  flatten3 (List xs) =  foldr (++) [] $ map flatten3 xs
+  flatten3 (List xs) = foldr (++) [] $ map flatten3 xs
 
 By the way, a nested list is just a tree.
