@@ -14,7 +14,6 @@ Flatten a nested list structure.
                             ]
   [1,2,3,4,5]
 
-
 We have to define a new data type, since lists in Haskell should be 
 homogeneous.
 
@@ -23,10 +22,23 @@ homogeneous.
 >   | List [NestedList a]
 >   deriving (Eq, Show)
 > 
+> nLst :: NestedList Int
+> nLst 
+>  = List [ Elem 1
+>         , List [ Elem 2
+>                , List [ Elem 3
+>                       , Elem 4
+>                       ]
+>                , Elem 5
+>                ]
+>         ] 
+
 > myFlatten :: NestedList a -> [a]
-> myFlatten (List [])     = []
 > myFlatten (Elem x)      = [x]
-> myFlatten (List (x:xs)) = myFlatten x ++ myFlatten (List xs)
+> myFlatten (List [])     = []
+> -- myFlatten (List (x:xs)) = myFlatten x ++ myFlatten (List xs)
+> -- myFlatten (List (x:xs)) = (++) (myFlatten x) (myFlatten (List xs))
+> myFlatten (List (x:xs)) = ((++) . myFlatten) x (myFlatten (List xs))
 
 Just a copy and paste of the solutions.
 
@@ -47,15 +59,16 @@ If you know the Monad,
 
 Using 
   foldr :: (a -> b -> b) -> b -> [a] -> b
-Note that, the universality of foldr is
+we can reduce myFlatten into the following form.
+(Note that, the universality of foldr is
   g = foldr f v
 iff
   g     [] = v
   g (x:xs) = f x (g xs)
-("A tutorial on the universality and expressiveness of fold (G. Hutton))
+("A tutorial on the universality and expressiveness of fold (G. Hutton)))
 
-  flatten3 :: NestedList a -> [a]
-  flatten3 (Elem x ) = [x]
-  flatten3 (List xs) = foldr (++) [] $ map flatten3 xs
+> flatten3 :: NestedList a -> [a]
+> flatten3 (Elem x ) = [x]
+> flatten3 (List xs) = foldr ((++) . flatten3) [] xs
 
 By the way, a nested list is just a tree.
