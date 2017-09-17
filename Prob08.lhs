@@ -10,7 +10,8 @@ The order of the elements should not be changed.
 
 > compress :: (Eq a) => [a] -> [a]
 > compress []     = []
-> compress (x:xs) = x : (compress (dropWhile (== x) xs))
+> -- compress (x:xs) = x : (compress (dropWhile (== x) xs))
+> compress (x:xs) = (:) x (compress (dropWhile (== x) xs))
 
 This is also copy and paste.
 It's nice to use dropWhile
@@ -35,3 +36,5 @@ It's nice to use dropWhile
 
 > compress''' :: (Eq a) => [a] -> [a]
 > compress''' = map head . group
+
+
