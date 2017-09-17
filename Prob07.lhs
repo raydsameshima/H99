@@ -67,6 +67,10 @@ iff
   g (x:xs) = f x (g xs)
 ("A tutorial on the universality and expressiveness of fold (G. Hutton)))
 
+So once we write our flatten function like
+  myFlatten (List (x:xs)) = ((++) . myFlatten) x (myFlatten (List xs))
+then we reach the follwoing implementation.
+
 > flatten3 :: NestedList a -> [a]
 > flatten3 (Elem x ) = [x]
 > flatten3 (List xs) = foldr ((++) . flatten3) [] xs
