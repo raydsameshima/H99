@@ -37,4 +37,18 @@ It's nice to use dropWhile
 > compress''' :: (Eq a) => [a] -> [a]
 > compress''' = map head . group
 
+-- foldr
+Here is an interesting version, using foldr and Maybe 
+but Maybe does not come up the final result!
 
+> compressF :: (Eq a) => [a] -> [a]
+> compressF xs = foldr f (const []) xs Nothing
+>   where
+>     f :: (Eq a) => 
+>          a -> (Maybe a -> [a]) -> (Maybe a -> [a])  
+>     f x r a@(Just q)
+>       | x == q = r a
+>     f x r _    = x : r (Just x)
+
+  foldr :: (a -> b -> b) -> b -> [a] -> b
+  const :: a -> b -> a

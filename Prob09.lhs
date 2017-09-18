@@ -15,7 +15,7 @@ I.e., make your Data.List.group.
 >     front = takeWhile (== x) xs
 >     rear  = dropWhile (== x) xs   
 
-Slightly modifed version of the solution.
+Slightly modified version of the solution.
 
   takeWhile :: (a -> Bool) -> [a] -> [a]
   takeWhile _ [] =  []
