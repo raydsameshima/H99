@@ -8,7 +8,9 @@ Run-length encoding of a list.
 Use the result of prob09.lhs to implement the so-called run-length encoding data compression method.
 Consecutive duplicates of elements are encoded as lists (N, E) where N is the number of duplicates of the element E.
 
-> encode :: Eq a => [a] -> [(Int, a)]
+> encode 
+>   :: Eq a => 
+>      [a] -> [(Int, a)]
 > encode = map encode' . group
 >   where 
 >     encode' xx@(x:_) = (length xx, x)
@@ -34,5 +36,7 @@ Or writing it pointfreestyle
     length Control.Arrow.&&& head
 
 > -- Using list comprehension.
-> encode'' :: Eq a => [a] -> [(Int, a)]
+> encode'' 
+>   :: Eq a => 
+>      [a] -> [(Int, a)]
 > encode'' xs = [(length x, head x) | x <- group xs]
