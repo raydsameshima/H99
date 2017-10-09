@@ -13,7 +13,8 @@ Drop every N'th element from a list.
 
 > isNotNth 
 >   :: Int -> (Int,a) -> Bool
-> isNotNth n (m,_) = not (n == m)
+> -- isNotNth n (m,_) = not (n == m)
+> isNotNth n (m,_) = n /= m
 
   *Prob16> zip (generator 3) "abcdefghik"
   [(1,'a'),(2,'b'),(3,'c'),(1,'d'),(2,'e'),(3,'f'),(1,'g'),(2,'h'),(3,'i'),(1,'k')]
