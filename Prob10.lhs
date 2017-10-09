@@ -40,3 +40,12 @@ Or writing it pointfreestyle
 >   :: Eq a => 
 >      [a] -> [(Int, a)]
 > encode'' xs = [(length x, head x) | x <- group xs]
+
+$ hlint Prob10.lhs
+Prob10.lhs:29:18: Suggestion: Use &&&
+Found:
+  \ x -> (length x, head x)
+Why not:
+  length Control.Arrow.&&& head
+
+1 hint
