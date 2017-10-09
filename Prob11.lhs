@@ -32,7 +32,7 @@ The ListItem definition contains 'deriving (Show)' so that we can get interactiv
 
 This problem could also be solved using list comprehension:
 
-> modifiedEncode' 
+> modifiedEncode', modifiedEncode'' 
 >   :: Eq a => 
 >      [a] -> [ListItem a]
 > modifiedEncode' xs = 
@@ -42,9 +42,6 @@ This problem could also be solved using list comprehension:
 >                  else Multiple (length x) (head x)
 >   ]
 >
-> modifiedEncode'' 
->   :: Eq a => 
->      [a] -> [ListItem a]
 > modifiedEncode'' xs = [helper x | x <- group xs]
 >   where
 >     helper ts@(t:_) 
