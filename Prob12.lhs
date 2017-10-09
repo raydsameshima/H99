@@ -2,7 +2,7 @@ Prob12.lhs
 
 > module Prob12 where
 
-> import Prob11
+> import Prob11 (ListItem(..), modifiedEncode)
 > import Test.QuickCheck
  
 Decode a run-length encoded list.
@@ -44,6 +44,8 @@ Another solution can be implemented by using concatMap:
 > decodeConcatMap 
 >   :: [ListItem a] -> [a]
 > decodeConcatMap = decodeConcatMap' . map toTuple
+
+-- QuickCheck
 
 Let's check the selfconsistency of decode's.
 
