@@ -1,6 +1,7 @@
 Prob15.lhs
 
 > module Prob15 where 
+> import Data.List (replicate, transpose)
 
 Replicate the elements of a list a given number of times.
 
@@ -22,3 +23,7 @@ Another implementation using list comprehension which is similar to Prob14:
 >   :: [a] -> Int -> [a]
 > repli' lst n = [x | x <- lst, _ <- [1..n]]
 
+Or even using replicate,
+
+> repli'' xs n = concat . transpose . replicate n $ xs
+> repli''' xs n = xs >>= replicate n
