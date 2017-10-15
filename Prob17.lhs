@@ -53,3 +53,17 @@ A recursive solution constructing the 2-tuple:
 >                 )
 
 This is also efficient.
+
+Using two list comprehensions,   
+
+> split4 :: [a] -> Int -> ([a],[a])
+> split4 lst n = (fstn, rest)
+>   where
+>     fstn = [x | (x,i) <- zip lst [1..], i <= n]
+>     rest = [x | (x,i) <- zip lst [1..], i >  n]
+ 
+  *Prob17> split''' [1..10000] 5000
+  (0.31 secs, 50,218,368 bytes)
+  *Prob17> split4 [1..10000] 5000
+  (0.30 secs, 48,101,912 bytes)
+This is also compatible to the above imprementation.
