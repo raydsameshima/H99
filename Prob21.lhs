@@ -26,3 +26,22 @@ Insert an element at a given position into a list.
 >     helper (a,b) c = a ++ [c] ++ b
 >     slst = split'' lst (n-1) 
 
+Using foldr with cons (:) which faster (O(n) v.s. O(n^2)).
+
+> insertAt'' 
+>   :: a -> [a] -> Int -> [a]
+> insertAt'' y xs n = foldr helper [] $ xs'
+>   where
+>     xs' = zip xs [1..]
+>     helper (x, i) xs
+>       | i == n    = y:x:xs
+>       | otherwise = x:xs
+
+  *Prob21> insertAt 2 ones 100000
+  (1.13 secs, 199,284,400 bytes)
+
+  *Prob21> insertAt' 2 ones 100000
+  (1.70 secs, 244,884,768 bytes)
+
+  *Prob21> insertAt'' 2 ones 100000
+  (1.35 secs, 219,284,040 bytes)
