@@ -9,14 +9,25 @@ Extract a given number of randomly selected elements from a list.
 > -- replicateM :: Monad m => Int -> m a -> m [a]
 > import Data.List (nub)
 
-> rnd_select :: [a] -> Int -> IO [a]
-> rnd_select [] _ = return [] 
-> rnd_select ls n
+From the solution:
+
+> rndSelect
+>   :: [a] -> Int -> IO [a]
+> rndSelect [] _ = return [] 
+> rndSelect ls n
 >   | n < 0     = error "N must be greater than zero."
 >   | otherwise = do 
->       pos <- replicateM n $ 
->                getStdRandom $ randomR (0, (length ls)-1)
->       return [ls !! p | p <- pos]
+>     pos <- replicateM n .
+>            getStdRandom . 
+>            randomR 
+>            $ (0, (length ls)-1)
+> {-
+>     pos <- replicateM n $ -- :: Monad m => Int -> m a -> m [a]
+>            getStdRandom $ -- :: (StdGen -> (a,StdGen)) -> IO a
+>            randomR -- :: (Random a,RandomGen g) => (a,a) -> g -> (a,g)
+>            (0, (length ls)-1)
+> -}
+>     return [ls !! p | p <- pos]
   
   *Prob23 System.Random Control.Monad> rnd_select [1..100] 1
   [50]
@@ -31,8 +42,9 @@ A more elegant solution using
   *Prob23> :t randomR
   randomR :: (RandomGen g, Random a) => (a, a) -> g -> (a, g)
 
-> rnd_select' :: [a] -> Int -> IO [a]
-> rnd_select' xs n = do
+> rndSelect' 
+>   :: [a] -> Int -> IO [a]
+> rndSelect' xs n = do
 >   gen <- getStdGen
 >   return $ take n [xs !! x | x <- randomRs (0, (length xs)-1) gen]
 
@@ -48,16 +60,16 @@ A more elegant solution using
 
 Another implementation which uses O(N) algorithm (I'm not sure):
 
-> rnd_select'' :: [a] -> Int -> IO [a]
-> rnd_select'' _      0 = return []
-> rnd_select'' (x:xs) n = do
+> rndSelect'' :: [a] -> Int -> IO [a]
+> rndSelect'' _      0 = return []
+> rndSelect'' (x:xs) n = do
 >   r <- randomRIO (0, length xs)
 >   if r < n 
 >     then do
->       rest <- rnd_select'' xs (n-1)
+>       rest <- rndSelect'' xs (n-1)
 >       return (x : rest)
 >     else
->       rnd_select'' xs n
+>       rndSelect'' xs n
 
   *Prob23> rnd_select "aiueo" 5
   "uooie"
@@ -68,7 +80,7 @@ Another implementation which uses O(N) algorithm (I'm not sure):
 
 Using aplicative:
 
-> rnd_select''' :: [a] -> Int -> IO [a]
-> rnd_select''' lst n = map (lst !!) <$> indices
+> rndSelect''' :: [a] -> Int -> IO [a]
+> rndSelect''' lst n = map (lst !!) <$> indices
 >   where
 >     indices = take n . nub . randomRs (0, (length lst) -1) <$> getStdGen
