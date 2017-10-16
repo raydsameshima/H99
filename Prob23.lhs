@@ -5,8 +5,7 @@ Prob23.lhs
 Extract a given number of randomly selected elements from a list.
 
 > import System.Random
-> import Control.Monad (replicateM)
-> -- replicateM :: Monad m => Int -> m a -> m [a]
+> import Control.Monad (replicateM) -- :: Monad m => Int -> m a -> m [a]
 > import Data.List (nub)
 
 From the solution:
@@ -17,8 +16,8 @@ From the solution:
 > rndSelect ls n
 >   | n < 0     = error "N must be greater than zero."
 >   | otherwise = do 
->     pos <- replicateM n .
->            getStdRandom . 
+>     pos <- replicateM n . -- :: m a -> m [a]
+>            getStdRandom . -- :: (StdGen -> (a,StdGen)) -> IO a
 >            randomR 
 >            $ (0, (length ls)-1)
 > {-
@@ -84,3 +83,8 @@ Using aplicative:
 > rndSelect''' lst n = map (lst !!) <$> indices
 >   where
 >     indices = take n . nub . randomRs (0, (length lst) -1) <$> getStdGen
+
+From an example on hackage
+
+> rollDice :: IO Int
+> rollDice = getStdRandom $ randomR (1,6)
