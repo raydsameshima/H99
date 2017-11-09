@@ -28,14 +28,12 @@ From the solution:
 > -}
 >     return [ls !! p | p <- pos]
   
-  *Prob23 System.Random Control.Monad> rnd_select [1..100] 1
-  [50]
-  (0.00 secs, 1,034,720 bytes)
-  *Prob23 System.Random Control.Monad> rnd_select [1..100] 1
-  [10]
-  (0.00 secs, 1,034,736 bytes)
-  *Prob23 System.Random Control.Monad> rnd_select [1..100] 1
-  [23]
+  *Prob23> rndSelect "abcdefgh" 3
+  "fhc"
+  *Prob23> rndSelect "abcdefgh" 3
+  "gah"
+  *Prob23> rndSelect "abcdefgh" 3
+  "hga"
 
 A more elegant solution using
   *Prob23> :t randomR
@@ -84,7 +82,18 @@ Using aplicative:
 >   where
 >     indices = take n . nub . randomRs (0, (length lst) -1) <$> getStdGen
 
-From an example on hackage
-
+From an example on hackage,
+  https://hackage.haskell.org/package/random-1.1/docs/System-Random.html
+ 
 > rollDice :: IO Int
-> rollDice = getStdRandom $ randomR (1,6)
+> rollDice = getStdRandom . randomR $ (1,6)
+
+  https://qiita.com/philopon/items/8f647fc8dafe66b7381b
+
+> rndSelect4 :: [a] -> Int -> IO [a]
+> rndSelect4 = undefined
+> {-
+> rndSelect4 lst n = do
+>   is <- getStdRandom . randomRs $ (1, length lst)
+>   return $ take n $ map (lst !!) is
+> -}
