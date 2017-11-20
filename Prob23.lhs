@@ -57,7 +57,8 @@ A more elegant solution using
 
 Another implementation which uses O(N) algorithm (I'm not sure):
 
-> rndSelect'' :: [a] -> Int -> IO [a]
+> rndSelect'' 
+>   :: [a] -> Int -> IO [a]
 > rndSelect'' _      0 = return []
 > rndSelect'' (x:xs) n = do
 >   r <- randomRIO (0, length xs)
