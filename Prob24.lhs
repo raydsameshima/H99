@@ -5,21 +5,20 @@ Prob24.lhs
 Lotto: Draw N different random numbers from the set 1..M.
 
 > import System.Random
-> import Prob23 (rnd_select''')
+> import Prob23 (rndSelect'')
 > import Data.List (nub)
 
-  *Prob24> return [0..9] >>= (`rnd_select'''` 8)
-  [9,6,7,3,2,8,4,5]
-
-> diff_select :: Int -> Int -> IO [Int]
-> diff_select n m 
->   | m > 0     = return [1..m] >>= (`rnd_select'''` n)
+> diffSelect 
+>   :: Int -> Int -> IO [Int]
+> diffSelect n m 
+>   | m > 0     = (`rndSelect''` n) [1 .. m]
+>-- | m > 0     = return [1..m] >>= (`rndSelect''` n)
 >   | otherwise = return []
 
 Above implementation is the same as the following due to the monad law (left identity (return x >>= f == f x)):
 
 > diff_select' :: Int -> Int -> IO [Int]
-> diff_select' n m = rnd_select''' [1..m] n
+> diff_select' n m = rndSelect'' [1..m] n
 
 The following implementation will return different values when called several times.
 
