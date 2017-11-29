@@ -18,11 +18,11 @@ From the solution:
 > rndSelect ls n
 >   | n < 0     = error "N must be greater than zero."
 >   | otherwise = do 
->     pos <- replicateM n . -- :: m a -> m [a]
->            getStdRandom . -- :: (StdGen -> (a,StdGen)) -> IO a
->            randomR 
->            $ (0, (length ls)-1)
->     return [ls !! p | p <- pos]
+>     ps <- replicateM n . -- :: m a -> m [a]
+>           getStdRandom . -- :: (StdGen -> (a,StdGen)) -> IO a
+>           randomR        -- :: RandomGen g => (a, a) -> g -> (a, g)
+>           $ (0, (length ls)-1)
+>     return [ls !! p | p <- ps]
   
   *Prob23> rndSelect "abcdefgh" 3
   "fhc"
@@ -69,3 +69,25 @@ Using aplicative:
 > rndSelect''' lst n = map (lst !!) <$> indices
 >   where
 >     indices = take n . nub . randomRs (0, (length lst) -1) <$> getStdGen
+
+From 
+  https://hackage.haskell.org/package/random-1.1/docs/System-Random.html
+
+> rollDice :: IO Int
+> rollDice = getStdRandom $ randomR (1, 6)
+
+> rollDices, rollDices' :: IO [Int]
+> rollDices = do
+>   g <- newStdGen
+>   return (randomRs (1,6) g)
+>
+> rollDices' = randomRs (1,6) <$> newStdGen -- using applicative style
+>
+> rollDicesN, rollDicesN' :: Int -> IO [Int]
+> rollDicesN n = do
+>   rs <- rollDices'
+>   return (take n rs)
+>
+> rollDicesN' n = take n . randomRs (1,6) <$> newStdGen
+>
+> 

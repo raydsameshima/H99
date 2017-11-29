@@ -15,9 +15,13 @@ Lotto: Draw N different random numbers from the set 1..M.
 >-- | m > 0     = return [1..m] >>= (`rndSelect''` n)
 >   | otherwise = return []
 
-Above implementation is the same as the following due to the monad law (left identity (return x >>= f == f x)):
+Above implementation is the same as the following due to the monad law 
+(left identity:
+  return x >>= f === f x
+)
 
-> diff_select' :: Int -> Int -> IO [Int]
+> diff_select' 
+>   :: Int -> Int -> IO [Int]
 > diff_select' n m = rndSelect'' [1..m] n
 
 The following implementation will return different values when called several times.
