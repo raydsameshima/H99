@@ -72,22 +72,38 @@ Using aplicative:
 
 From 
   https://hackage.haskell.org/package/random-1.1/docs/System-Random.html
+and for applicative style,
+  http://d.hatena.ne.jp/kazu-yamamoto/20101211/1292021817
 
-> rollDice :: IO Int
+> rollDice
+>   :: IO Int
 > rollDice = getStdRandom $ randomR (1, 6)
 
-> rollDices, rollDices' :: IO [Int]
+> rollDices, rollDices' 
+>   :: IO [Int]
 > rollDices = do
 >   g <- newStdGen
 >   return (randomRs (1,6) g)
 >
 > rollDices' = randomRs (1,6) <$> newStdGen -- using applicative style
 >
-> rollDicesN, rollDicesN' :: Int -> IO [Int]
+> rollDicesN, rollDicesN' 
+>   :: Int -> IO [Int]
 > rollDicesN n = do
 >   rs <- rollDices'
 >   return (take n rs)
 >
 > rollDicesN' n = take n . randomRs (1,6) <$> newStdGen
 >
-> 
+> -- A generalized dice, from 0 to (m-1) for the indeces.
+> gRollDices 
+>   :: Int -> Int -> IO [Int]
+> gRollDices m n = take n . randomRs (0,m-1) <$>  newStdGen
+>
+> randomSelect
+>  :: [a] -> Int -> IO [a]
+> randomSelect lst n = do
+>   let l = length lst
+>   is <- gRollDices l n
+>   return [lst !! x | x <- is]
+ 
