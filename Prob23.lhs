@@ -94,12 +94,16 @@ and for applicative style,
 >   return (take n rs)
 >
 > rollDicesN' n = take n . randomRs (1,6) <$> newStdGen
->
-> -- A generalized dice, from 0 to (m-1) for the indeces.
+
+A generalized dice, from 0 to (m-1) for the indeces.
+
 > gRollDices 
 >   :: Int -> Int -> IO [Int]
 > gRollDices m n = take n . randomRs (0,m-1) <$>  newStdGen
->
+
+Using gRollDices to generate quasi-random indeces, randomSelect returns
+n random elements of given lst.
+ 
 > randomSelect
 >  :: [a] -> Int -> IO [a]
 > randomSelect lst n = do
