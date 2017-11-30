@@ -4,26 +4,27 @@ Prob25.lhs
 
 Generate a random permutation of the elements of a list.
 
-> import System.Random
-> import Data.List (nub)
+> import Data.List
+>   ( nub 
+>   , permutations
+>   )
+> import Prob23
+>   ( infDices
+>   , randomSelect )
 
-Using the same method of Prob23:
+Making an infinite list of indices, it takes first l elements (to terminate
+this function!), and returns the given list with quasi-random indices.
 
-> rnd_permu :: [a] -> IO [a]
-> rnd_permu lst = map (lst !!) <$> randomIndices (length lst)
+> randomPermutation
+>   :: [a] -> IO [a]
+> randomPermutation ls = do
+>   let l = length ls
+>   is <- take l . nub <$> infDices l
+>   return [ls !! i | i <- is]
 
-> randomIndices :: Int -> IO [Int]
-> randomIndices n = take n . nub . randomRs (0, n-1) <$> getStdGen
+Using Data.List.permutations, we can also make the following implementation.
+Note that, this is [] safe, since permutations [] is a singleton [[]].
 
-We can generate the permutation recursively:
-
-> rnd_permu' :: [a] -> IO [a]
-> rnd_permu' [] = return []
-> rnd_permu' (x:xs) = do
->   rand <- randomRIO (0, (length xs))
->   rest <- rnd_permu xs
->   return $ let (ys,zs) = splitAt rand rest
->            in  ys ++ (x : zs)
-
-  *Prob25> splitAt 3 [0..9]
-  ([0,1,2],[3,4,5,6,7,8,9])
+> randomPermutation'
+>   :: [a] -> IO [a]
+> randomPermutation' ls = head <$> randomSelect (permutations ls) 1

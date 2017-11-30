@@ -97,12 +97,12 @@ and for applicative style,
 
 A generalized dice, from 0 to (m-1) for the indeces.
 
-> gRollDices 
->   :: Int -> Int -> IO [Int]
-> gRollDices m n = take n <$> infDices m
 > infDices
 >   :: Int -> IO [Int]
 > infDices m = randomRs (0,m-1) <$> newStdGen
+> gRollDices
+>   :: Int -> Int -> IO [Int]
+> gRollDices m n = take n <$> infDices m
 
 Using gRollDices to generate quasi-random indeces, randomSelect returns
 n random elements of given lst.
