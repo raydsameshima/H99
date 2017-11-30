@@ -2,21 +2,32 @@ Prob26.lhs
 
 > module Prob26 where
 
-Generate the combinations of K distinct objects chosen from the the N elements of a list.
+Generate the combinations of K distinct objects chosen from the N elements
+of a list.
 
-> import Data.List (tails, subsequences)
+> import Data.List 
+>   ( tails -- [1,2,3] -> [[1,2,3],[2,3],[3],[]]
+>   , subsequences )
 
 List comprehensions:
 
-> combinations :: Int -> [a] -> [[a]]
+> combinations 
+>   :: Int -> [a] -> [[a]]
 > combinations 0 _ = [[]]
 > combinations n lst 
 >   = [ y:ys | y:xs' <- tails lst
 >            , ys <- combinations (n-1) xs']
 
+  *Prob26> combinations 2 [1..3]
+  [[1,2],[1,3],[2,3]]
+  *Prob26> combinations 3 [1..5]
+  [[1,2,3],[1,2,4],[1,2,5],[1,3,4],[1,3,5]
+  ,[1,4,5],[2,3,4],[2,3,5],[2,4,5],[3,4,5]]
+
 do-notation:
 
-> combinations' :: Int -> [a] -> [[a]]
+> combinations' 
+>   :: Int -> [a] -> [[a]]
 > combinations' 0 _ = return []
 > combinations' n lst = do
 >   y:xs <- tails lst
@@ -25,7 +36,8 @@ do-notation:
 
 Without using tails:
 
-> combinations'' :: Int -> [a] -> [[a]]  
+> combinations'' 
+>   :: Int -> [a] -> [[a]]  
 > combinations'' _ []     = [[]]
 > combinations'' 0 _      = [[]]
 > combinations'' n (x:xs) = (map (x:) lstWithout_x) ++ rest
@@ -33,7 +45,8 @@ Without using tails:
 >     lstWithout_x = combinations'' (n-1) xs
 >     rest = combinations n xs 
 
-> combinations''' :: Int -> [a] -> [[a]]
+> combinations''' 
+>   :: Int -> [a] -> [[a]]
 > combinations''' _ [] = [[]]
 > combinations''' 0 _  = [[]]
 > combinations''' n xs 
@@ -42,7 +55,8 @@ Without using tails:
 
 Using subsequences in Data.List, but this is super slow:
 
-> combinations4 :: Int -> [a] -> [[a]]
+> combinations4 
+>   :: Int -> [a] -> [[a]]
 > combinations4 k ns = filter ((k==) . length) (subsequences ns)
 
   *Prob26> combinations 3 [1..100]
