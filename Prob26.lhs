@@ -15,20 +15,39 @@ List comprehensions:
 >   :: Int -> [a] -> [[a]]
 > combinations 0 _ = [[]]
 > combinations n lst 
->   = [ y:ys | y:xs' <- tails lst
->            , ys <- combinations (n-1) xs']
-
+>   = [ y:ys | y:xs <- tails lst
+>            , ys <- combinations (n-1) xs ]
+ 
   *Prob26> combinations 2 [1..3]
   [[1,2],[1,3],[2,3]]
-  *Prob26> combinations 3 [1..5]
-  [[1,2,3],[1,2,4],[1,2,5],[1,3,4],[1,3,5]
-  ,[1,4,5],[2,3,4],[2,3,5],[2,4,5],[3,4,5]]
+
+Let us trace this example step by step.
+  c 2 [1,2,3]
+    = [y:ys | y:xs <- [[1,2,3],[2,3],[3],[]], ys <- c 1 xs]
+
+(y:xs)=[1,2,3] case, i.e., y=1 and 
+  ys <- c 1 [2,3] 
+        = [z:zs | z:ws <- [[2,3],[3],[]], zs <- [[]]]
+        = [2:[], 3:[]]
+        = [[2],[3]]
+Therefore, we have [1,2] and [1,3] as elements.
+
+(y:xs)=[2,3] case, i.e., y=2 and
+  ys <- c 1 [3] = [[3]]
+and [2,3] as the element.
+
+(y:xs) = [3] case, i.e., y=3 and
+  ys <- c 1 [] = []
+but we can not pick any element from [].
+So this case and the following (y:xs)=[] case do not contribute.
+Thus c 2 [1,2,3] returns
+  [[1,2],[1,3],[2,3]]
 
 do-notation:
 
 > combinations' 
 >   :: Int -> [a] -> [[a]]
-> combinations' 0 _ = return []
+> combinations' 0 _   = return []
 > combinations' n lst = do
 >   y:xs <- tails lst
 >   ys <- combinations (n-1) xs
@@ -37,6 +56,14 @@ do-notation:
 Without using tails:
 
 > combinations'' 
+>   :: Int -> [a] -> [[a]]
+> combinations'' 0 _      = [[]]
+> combinations'' _ []     = []
+> combinations'' n (x:xs) = map (x:) (combinations'' (n-1) xs) 
+>                          ++ (combinations'' n xs)
+
+> {-
+> combinations'' 
 >   :: Int -> [a] -> [[a]]  
 > combinations'' _ []     = [[]]
 > combinations'' 0 _      = [[]]
@@ -44,6 +71,7 @@ Without using tails:
 >   where
 >     lstWithout_x = combinations'' (n-1) xs
 >     rest = combinations n xs 
+> -}
 
 > combinations''' 
 >   :: Int -> [a] -> [[a]]
@@ -67,5 +95,6 @@ Using subsequences in Data.List, but this is super slow:
   (10.28 secs, 1,730,618,824 bytes)
   *Prob26> combinations''' 3 [1..100]
   (11.37 secs, 1,786,674,056 bytes)
+
 
 
