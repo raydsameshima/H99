@@ -10,6 +10,24 @@ of a list.
 >   , subsequences )
 > import Test.QuickCheck
 
+Without using tails, the logic is the following; we must have only
+one way to take 0 element in any list, so we put a universal singleton,
+i.e., [[]].
+As the base case for recursion, we can not take any element from empty list.
+Induction step; if we want to pick n-elements from (x:xs), the first sublist
+must contain x in their heads, and the tail mush be (n-1) xs, i.e., the induction
+hypothesis.
+The rest parts do not have x in their heads, and we take these concatenation.
+
+> combinations0
+>   :: Int -> [a] -> [[a]]
+> combinations0 0 _      = [[]]
+> combinations0 _ []     = []
+> combinations0 n (x:xs) = map (x:) (combinations0 (n-1) xs) 
+>                          ++ (combinations0 n xs)
+
+From the solution
+  https://wiki.haskell.org/99_questions/Solutions/26
 List comprehensions:
 
 > combinations 
@@ -44,7 +62,17 @@ So this case and the following (y:xs)=[] case do not contribute.
 Thus c 2 [1,2,3] returns
   [[1,2],[1,3],[2,3]]
 
-do-notation:
+Since the number of terms can combinatorially explode, the following 
+QuickCheck-code will take too long time!
+
+> prop_NaiveRecursion 
+>   :: Int -> [Int] -> Bool
+> prop_NaiveRecursion int ls = combinations int ls == combinations0 int ls
+>   where 
+>     types = int :: Int
+>     types' = ls :: [Int]
+
+do-notation (the same game with list "monad"):
 
 > combinations' 
 >   :: Int -> [a] -> [[a]]
@@ -53,32 +81,6 @@ do-notation:
 >   y:xs <- tails lst
 >   ys <- combinations (n-1) xs
 >   return (y:ys) 
-
-Without using tails, the logic is the following; we must have only
-one way to take 0 element in any list, so we put a universal singleton,
-i.e., [[]].
-As the base case for recursion, we can not take any element from empty list.
-Induction step; if we want to pick n-elements from (x:xs), the first sublist
-must contain x in their heads, and the tail mush be (n-1) xs, i.e., the induction
-hypothesis.
-The rest parts do not have x in their heads, and we take these concatenation.
-
-> combinations'' 
->   :: Int -> [a] -> [[a]]
-> combinations'' 0 _      = [[]]
-> combinations'' _ []     = []
-> combinations'' n (x:xs) = map (x:) (combinations'' (n-1) xs) 
->                          ++ (combinations'' n xs)
-
-Since the number of terms can combinatorially explode, the following 
-QuickCheck-code will take too long time!
-
-> prop_NaiveRecursion 
->   :: Int -> [Int] -> Bool
-> prop_NaiveRecursion int ls = combinations int ls == combinations'' int ls
->   where 
->     types = int :: Int
->     types' = ls :: [Int]
 
 So, instead of performing above code, I took small tests:
   *Prob26> check i j = combinations i [0..j] == combinations'' i [0..j]
@@ -110,17 +112,6 @@ So, instead of performing above code, I took small tests:
   True
   *Prob26> check  (-11) 12
   True
-
-> {-
-> combinations'' 
->   :: Int -> [a] -> [[a]]  
-> combinations'' _ []     = [[]]
-> combinations'' 0 _      = [[]]
-> combinations'' n (x:xs) = (map (x:) lstWithout_x) ++ rest
->   where
->     lstWithout_x = combinations'' (n-1) xs
->     rest = combinations n xs 
-> -}
 
 > combinations''' 
 >   :: Int -> [a] -> [[a]]
