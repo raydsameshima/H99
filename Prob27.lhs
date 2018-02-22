@@ -32,6 +32,8 @@ we divide the cases: either x (head element) is in the first or second.
   *Prob27> 6*5*4 `div` (1*2*3)
   20
 
+Finally we recursively apply combination function toward [Int]:
+
 > group 
 >   :: [Int] -> [a] -> [[[a]]]
 > group []     _  = [[]]
@@ -39,3 +41,5 @@ we divide the cases: either x (head element) is in the first or second.
 >   [ g:gs | (g, rs) <- combination n xs
 >          , gs      <- group ns rs ]
 
+  *Prob27> group [1,2] [1..3]
+  [[[1],[2,3]],[[2],[1,3]],[[3],[1,2]]]
