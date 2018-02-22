@@ -7,7 +7,8 @@ of a list.
 
 > import Data.List 
 >   ( tails -- [1,2,3] -> [[1,2,3],[2,3],[3],[]]
->   , subsequences )
+>   , subsequences -- power list
+>   )
 > import Test.QuickCheck
 
 Without using tails, the logic is the following; we must have only
@@ -15,9 +16,10 @@ one way to take 0 element in any list, so we put a universal singleton,
 i.e., [[]].
 As the base case for recursion, we can not take any element from empty list.
 Induction step; if we want to pick n-elements from (x:xs), the first sublist
-must contain x in their heads, and the tail mush be (n-1) xs, i.e., the induction
-hypothesis.
+must contain x in their heads, and the tail mush be (n-1) xs, i.e., the induction hypothesis.
 The rest parts do not have x in their heads, and we take these concatenation.
+The key equation is
+  C(n,k) = C(n-1,k) + C(n-1,k-1).
 
 > combinations0
 >   :: Int -> [a] -> [[a]]
@@ -135,6 +137,5 @@ Using subsequences in Data.List, but this is super slow:
   (10.28 secs, 1,730,618,824 bytes)
   *Prob26> combinations''' 3 [1..100]
   (11.37 secs, 1,786,674,056 bytes)
-
 
 
