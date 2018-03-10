@@ -7,7 +7,7 @@ Determine whether a given integer number is prime.
 See for the implementation:
   http://qiita.com/bra_cat_ket/items/6a99a9b01682886607d0
 
-Union for two lists.
+Order preserving union for two lists.
 
 > merge 
 >   :: (Ord a) => 
@@ -17,7 +17,7 @@ Union for two lists.
 >   | x == y = x : (merge xs ys)
 >   | x >  y = y : (merge xx ys)
 
-Difference lists.
+Difference lists, also order preserving.
 
 > diff 
 >   :: (Ord a) => 
@@ -27,7 +27,8 @@ Difference lists.
 >   | x == y = diff xs ys
 >   | x >  y = diff xx ys
 
-Let us make the list of nonPrimes, then taking difference from odds, we have the list of primes.
+Let us make the list of nonPrimes, then taking difference from odds, 
+we have the list of primes:
 
 > primes, nonPrimes 
 >   :: (Integral a) => 
@@ -35,10 +36,14 @@ Let us make the list of nonPrimes, then taking difference from odds, we have the
 > primes = 2:3:5: (diff [7,9..] nonPrimes)
 > nonPrimes = foldr1 merge' $ map helper $ tail primes
 >   where
->     merge' :: (Ord a) => [a] -> [a] -> [a]
+>     merge' 
+>       :: (Ord a) => 
+>          [a] -> [a] -> [a]
 >     merge' (x:xs) ys = x : (merge xs ys)
 >
->     helper :: (Integral a) => a -> [a]
+>     helper 
+>       :: (Integral a) => 
+>          a -> [a]
 >     helper p = [n*p | n <- [p, p+2..]]
 
   *Prob31> 7917 `elem` takeWhile (<7919) primes
@@ -53,7 +58,8 @@ Let us make the list of nonPrimes, then taking difference from odds, we have the
 >   where 
 >     upperLimit = floor . sqrt $ fromIntegral n
 
-Of course, we don't have to make primes to check whether each input is prime or not!
+Of course, we don't have to make primes to check whether each input is 
+prime or not!
 So this is clearly a super inefficient implementation.
 
 The below implementation is from 
@@ -61,7 +67,8 @@ The below implementation is from
 All primes larger than 2,3 can be written as 
   6*m + 1, 6*m + 5
 forms.
-In addition, all we have to do is to check whether the input n has its factor up to sqrt(n)
+In addition, all we have to do is to check whether the input n has its 
+factors up to sqrt(n):
 
 > isPrime' 
 >   :: (Integral a) => 
@@ -71,7 +78,14 @@ In addition, all we have to do is to check whether the input n has its factor up
 >   | n == 2 && n == 3 = True
 > isPrime' n = all ((/=0) . mod n) $ takeWhile (<= upperLimit) candidates
 >   where
+>     candidates 
+>       :: (Integral int) => 
+>          [int]
 >     candidates = 2:3: [x+i | x <- [6,12..], i <- [-1,1]]
+>
+>     upperLimit 
+>       :: (Integral int) => 
+>          int
 >     upperLimit = floor . sqrt $ fromIntegral n
 
 The following is, on the other hand, super slow.
