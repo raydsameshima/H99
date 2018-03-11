@@ -6,7 +6,9 @@ Determine whether two positive integer numbers are coprime. Two numbers are copr
 
 > import Prob32 (myGCD)
 
-> coprime :: Integral a => a -> a -> Bool
+> coprime 
+>   :: Integral a => 
+>      a -> a -> Bool
 > coprime n m = (myGCD n m == 1)
 
   *Prob33> coprime 35 64

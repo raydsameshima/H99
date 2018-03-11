@@ -7,7 +7,9 @@ https://en.wikipedia.org/wiki/Euclidean_algorithm
 
 The following implementation is the subtraction-based version which was Euclid's original version.
 
-> myGCD :: Integral a => a -> a -> a
+> myGCD 
+>   :: Integral a => 
+>      a -> a -> a
 > myGCD a b
 >   | b < 0 = myGCD a (-b)
 > myGCD a b
