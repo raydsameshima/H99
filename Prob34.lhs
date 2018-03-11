@@ -44,4 +44,3 @@ See wikipedia,
 >     r  = (n%1) * product rs
 >     
 > --  r = foldl (\acc x -> acc * (1 - (1%x))) (n%1) ps
-> 
