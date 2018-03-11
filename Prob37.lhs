@@ -1,7 +1,7 @@
 Prob37.lhs
 
 > module Prob37 where
-> import Prob34 (totient)
+> import Prob34 (totient'')
 > import Prob36 (primeFactorsMult)
 
 Calculate Euler's totient function phi(m) (improved).
@@ -21,7 +21,9 @@ Then phi(m) can be calculated with the following formula:
   *Prob37> product it
   144
 
-> phi :: Integral a => a -> a
+> phi 
+>   :: Integral a => 
+>      a -> a
 > phi n = product $ map (\(p,m) -> (p-1)*p^(m-1)) $ primeFactorsMult n
 
   *Prob31> isPrime 12073
@@ -36,7 +38,9 @@ Then phi(m) can be calculated with the following formula:
 
 Using list comprehension, here is a beautiful solution:
 
-> phi' :: Integral a => a -> a
+> phi' 
+>   :: Integral a => 
+>      a -> a
 > phi' n = product [(p-1)*p^(m-1) | (p,m) <- primeFactorsMult n]
 
   *Prob37> totient 10090
