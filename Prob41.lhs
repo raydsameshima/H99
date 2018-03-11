@@ -10,12 +10,16 @@ Try to find out how many such cases there are in the range 2..3000.
 
 > import Prob40 (goldbach)
 
-> goldbachList :: Integral a => a -> a -> [(a,(a,a))]
+> goldbachList 
+>   :: Integral a => 
+>      a -> a -> [(a,(a,a))]
 > goldbachList lowerL upperL
 >   | lowerL > upperL = error "wrong input"
 >   | otherwise = [(x, goldbach x)| x <- [lowerL .. upperL], even x]
 
-> goldbachList' :: Integral t => t -> t -> t -> [(t, (t, t))]
+> goldbachList' 
+>   :: Integral t => 
+>      t -> t -> t -> [(t, (t, t))]
 > goldbachList' lowerL upperL threshold
 >   = filter (\(_,(b,_)) -> b > threshold) $ goldbachList lowerL upperL
 

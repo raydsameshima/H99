@@ -12,5 +12,7 @@ Given a range of integers by its lower and upper limit, construct a list of all 
   [11,13,17,19]
   (0.01 secs, 3,617,392 bytes)
 
-> primesR :: Integral a => a -> a -> [a]
+> primesR 
+>   :: Integral a => 
+>      a -> a -> [a]
 > primesR lowerL upperL = dropWhile (< lowerL) $ takeWhile (< upperL) primes

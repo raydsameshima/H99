@@ -17,10 +17,12 @@ Write a predicate to find the two prime numbers that sum up to a given even inte
   *Prob40> last $ takeWhile (<28) primes
   23
 
-> import Prob31 
+> import Data.Numbers.Primes
 > import Prob39 (primesR)
 
-> goldbach :: Integral a => a -> (a,a)
+> goldbach, goldbach' 
+>   :: Integral a => 
+>      a -> (a,a)
 > goldbach n 
 >   | odd  n = error "input should be an even number"
 >   | even n = helper pList n 
@@ -30,13 +32,17 @@ Write a predicate to find the two prime numbers that sum up to a given even inte
 >       | biggest + p == n = (p, biggest)
 >       | biggest + p >  n = helper newPrimeList n
 >       | biggest + p <  n = helper ps n
->       where biggest = last pp
->             newPrimeList = init pp
+>       where 
+>         biggest = last pp
+>         newPrimeList = init pp
 
-> goldbachL :: Integral t => t -> [(t, t)]
+> goldbachL 
+>   :: Integral t => 
+>      t -> [(t, t)]
 > goldbachL n = [(x,y) | x<-pr, y<-pr, x<y, x+y == n]
->   where pr = primesR 2 (n-2)
-> goldbach' :: Integral a => a -> (a,a) 
+>   where 
+>     pr = primesR 2 (n-2)
+>
 > goldbach' = head . goldbachL
 
   *Prob40> goldbach' 1000000
