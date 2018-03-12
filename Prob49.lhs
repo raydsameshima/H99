@@ -8,27 +8,45 @@ An n-bit Gray code is a sequence of n-bit strings constructed according to certa
 
   > gray 3
   ["000","001","011","010","110","111","101","100"]   
-  *Prob48 Control.Monad> replicateM 3 ['0','1']
+
+  *Prob49> replicateM 3 ['0','1']
   ["000","001","010","011","100","101","110","111"]
 
 > import Control.Monad (replicateM)
 
-> gray :: Int -> [String]
+> gray 
+>   :: Int -> [String]
 > gray n = replicateM n ['0','1']
 
-> gray' :: Int -> [String]
+> gray' 
+>   :: Int -> [String]
 > gray' 0 = [""]
 > gray' n = foldr helper [] (gray (n-1))
->   where helper s acc = ("0" ++ s) : ("1" ++ s) : acc
+>   where 
+>     helper s acc = ("0" ++ s) : ("1" ++ s) : acc
 
-> gray'' :: Int -> [String]
+> gray'' 
+>   :: Int -> [String]
 > gray'' 0 = [""]
 > gray'' n = [ '0' : x | x <- prev] ++ [ '1' : x | x <- prev]
->   where prev = gray'' (n-1)
+>   where 
+>     prev = gray'' (n-1)
 
-  *Prob49> gray 10
-  (0.11 secs, 13,586,752 bytes)
-  *Prob49> gray' 10
-  (0.12 secs, 14,024,096 bytes)
-  *Prob49> gray'' 10
-  (0.12 secs, 13,997,720 bytes)
+So far above implementations return well-formed strings.
+An efficient way with foldr from the solution:
+
+> grayr 
+>   :: Integral i =>
+>      i -> [String]
+> grayr 0 = [""]
+> grayr n = foldr helper [] (grayr (n-1))
+>   where
+>     helper s acc = ("0" ++ s) : ("1" ++ s) : acc
+
+That is, we add 0 and 1 as heads.
+
+  *Prob49> grayr 3
+  ["000","100","010","110","001","101","011","111"]
+  *Prob49> grayr 4
+  ["0000","1000","0100","1100","0010","1010","0110","1110"
+  ,"0001","1001","0101","1101","0011","1011","0111","1111"]
