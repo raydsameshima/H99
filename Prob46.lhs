@@ -21,29 +21,35 @@ Now, write a predicate table/3 which prints the truth table of a given logical e
 > infixl 6 `nand'`
 > infixl 3 `equ`
 
-> and', or' :: Bool -> Bool -> Bool
+> and', or' 
+>   :: Bool -> Bool -> Bool
 > and' True  True  = True
 > and' _     _     = False
 > or'  False False = False
 > or'  _     _     = True
 
-> not' :: Bool -> Bool
+> not' 
+>   :: Bool -> Bool
 > not' True  = False
 > not' False = True
 >
-> nand', nor' :: Bool -> Bool -> Bool
+> nand', nor' 
+>   :: Bool -> Bool -> Bool
 > nand' a b = not' (and' a b)
 > nor'  a b = not' (or' a b)
 
-> xor' :: Bool -> Bool -> Bool
+> xor' 
+>   :: Bool -> Bool -> Bool
 > xor' a b = (a /= b)
 
 > -- (==>)
-> impl :: Bool -> Bool -> Bool
+> impl 
+>   :: Bool -> Bool -> Bool
 > True  `impl` b = b
 > False `impl` _ = True
 
-> equ :: (Bool -> Bool) -> (Bool -> Bool) -> Bool
+> equ 
+>   :: (Bool -> Bool) -> (Bool -> Bool) -> Bool
 > equ bf1 bf2 = foldr and' True [bf1 x == bf2 x| x <- [True, False]] 
 
   *Prob46> equ not' (not' . not' . not')
@@ -62,9 +68,17 @@ Now, write a predicate table/3 which prints the truth table of a given logical e
   *Prob46> putStrLn $ show True ++ " " ++ show False
   True False
 
-> table :: (Bool -> Bool -> Bool) -- Boolean function
->          -> IO ()
-> table bf = mapM_ putStrLn 
->   [ show a ++ " " ++ show b ++ " " ++ show (bf a b) 
->   | a <- [True, False], b <- [True, False]]
+From the solution:
+
+> table 
+>   :: (Bool -> Bool -> Bool) -- Boolean function
+>      -> IO ()
+> table bf 
+>   = mapM_ putStrLn 
+>           [ show' a ++ " " ++ show' b ++ " " ++ show' (bf a b) 
+>           | a <- [True, False], b <- [True, False]
+>           ]
+>       where
+>         show' True  = show True ++ " "
+>         show' False = show False
 
