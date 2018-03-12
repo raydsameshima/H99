@@ -76,9 +76,10 @@ From the solution:
 > table bf 
 >   = mapM_ putStrLn 
 >           [ show' a ++ " " ++ show' b ++ " " ++ show' (bf a b) 
->           | a <- [True, False], b <- [True, False]
+>           | a <- tf, b <- tf
 >           ]
 >       where
 >         show' True  = show True ++ " "
 >         show' False = show False
+>         tf = [True, False]
 

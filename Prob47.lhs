@@ -10,10 +10,4 @@ Define operator precedence as usual; i.e. as in Java.
 
 > import Prob46
 
-> table2 :: (Bool -> Bool -> Bool) -- Boolean function
->           -> IO ()
-> table2 bf 
->   = mapM_ putStrLn 
->     [ show a ++ " " ++ show b ++ " " ++ show (bf a b)
->     | a <- domain, b <- domain]
->     where domain = [True, False]      
+Nothing to do.
