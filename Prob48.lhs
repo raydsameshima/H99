@@ -55,7 +55,7 @@ A trial-generalized-boolean function:
   False  False  True   => True
   False  False  False  => True
 
-To replace args n,
+To replace args n, without using replicateM:
 
 > bTable 
 >   :: Int -> [[Bool]]
@@ -71,12 +71,9 @@ To replace args n,
 >   -> IO ()
 > tableN' n f = 
 >   mapM_ putStrLn [ toStr a ++ " => " ++ show (f a) 
->                  | a <- args n
+>                  | a <- bTable n
 >                  ]
 >     where
->       args :: Int -> [[Bool]]
->       args n = replicateM n [True, False]
->
 >       toStr :: [Bool] -> String
 >       toStr = unwords . map (\x -> show x ++ space x)
 >
@@ -84,3 +81,21 @@ To replace args n,
 >       space True  = "  "
 >       space False = " "
 
+  *Prob48> tableN 3 (\[a,b,c] -> (a && (b || c)) == (a && b) || (a && c))
+  True   True   True   => True
+  True   True   False  => True
+  True   False  True   => True
+  True   False  False  => True
+  False  True   True   => True
+  False  True   False  => True
+  False  False  True   => True
+  False  False  False  => True
+  *Prob48> tableN' 3 (\[a,b,c] -> (a && (b || c)) == (a && b) || (a && c))
+  True   True   True   => True
+  True   True   False  => True
+  True   False  True   => True
+  True   False  False  => True
+  False  True   True   => True
+  False  True   False  => True
+  False  False  True   => True
+  False  False  False  => True
