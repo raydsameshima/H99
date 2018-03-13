@@ -21,14 +21,16 @@ http://www.snap-tck.com/room03/c02/comp/comp032.html
 >   | Node Int (HTree a) (HTree a)
 >   deriving (Show)
 
-> sortByFreq :: [(a, Int)] -> [(a, Int)]
-> sortByFreq [] = []
+> sortByFreq 
+>   :: [(a, Int)] -> [(a, Int)]
+> sortByFreq []           = []
 > sortByFreq ((c,n):rest) = smaller ++ ((c,n):greater)
 >   where -- For input, quick sort
 >     smaller = sortByFreq [(d,m) | (d,m) <- rest, m <= n]
 >     greater = sortByFreq [(d,m) | (d,m) <- rest, m >  n]
 
-> converter :: [(a, Int)] -> [HTree a]
+> converter 
+>   :: [(a, Int)] -> [HTree a]
 > converter lst = map toLeaf lst
 >   where
 >     toLeaf :: (a, Int) -> HTree a
@@ -39,14 +41,17 @@ http://www.snap-tck.com/room03/c02/comp/comp032.html
   *Ptob50> converter it
   [Leaf ('f',5),Leaf ('e',9),Leaf ('c',12),Leaf ('b',13),Leaf ('d',16),Leaf ('a',45)]
 
-> weight :: HTree a -> Int
+> weight 
+>   :: HTree a -> Int
 > weight (Leaf (c,n)) = n
 > weight (Node n _ _) = n
 
-> fromList :: [(a,Int)] -> HTree a
+> fromList 
+>   :: [(a,Int)] -> HTree a
 > fromList = fromList' . converter . sortByFreq
 
-> fromList' :: [HTree a] -> HTree a
+> fromList' 
+>   :: [HTree a] -> HTree a
 > fromList' [l1,l2] = Node (n1+n2) l1 l2
 >   where -- They are sorted.
 >     n1 = weight l1
@@ -70,7 +75,8 @@ We have a Huffman tree:
                                       (Leaf ('e',9))) 
                              (Leaf ('d',16))))
 
-> huffman' :: HTree a -> [(a,String)]
+> huffman' 
+>   :: HTree a -> [(a,String)]
 > huffman' (Leaf (c,_)) = [(c,"")]
 > huffman' (Node _ (Leaf l1@(c1,_)) node2) 
 >   = (c1, "0"):(map (helper '1') $ huffman' node2) 
@@ -80,13 +86,16 @@ We have a Huffman tree:
 >   = (map (helper '0') $ huffman' node1) 
 >   ++ (map (helper '1') $ huffman' node2)
 >
-> helper :: Char -> (a, String) -> (a, String)
+> helper 
+>   :: Char -> (a, String) -> (a, String)
 > helper n (c,nums) = (c, n:nums)
 
-> huffman :: (Ord a) => [(a,Int)] -> [(a,String)]
+> huffman 
+>   :: (Ord a) => [(a,Int)] -> [(a,String)]
 > huffman = sortByA . huffman' . fromList . sortByFreq 
 >
-> sortByA :: (Ord a) => [(a,b)] -> [(a,b)]
+> sortByA 
+>   :: (Ord a) => [(a,b)] -> [(a,b)]
 > sortByA [] = []
 > sortByA (c:cs) = sm ++ (c:gt)
 >   where
@@ -97,7 +106,7 @@ We have a Huffman tree:
   *Ptob50> huffman [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)]
   [('a',"0"),('b',"101"),('c',"100"),('d',"111"),('e',"1101"),('f',"1100")]
 
-
-> example :: [(Char,Int)]
+> example 
+>   :: [(Char,Int)]
 > example = [(' ',7),('a',4),('e',4),('f',3),('h',2),('i',2),('l',2),('m',2),('n',2),('o',1),('p',1),('r',1),('s',2),('t',2),('u',1),('x',1)]
 
