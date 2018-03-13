@@ -28,7 +28,7 @@ An n-bit Gray code is a sequence of n-bit strings constructed according to certa
 > gray'' 
 >   :: Int -> [String]
 > gray'' 0 = [""]
-> gray'' n = [ '0' : x | x <- prev] ++ [ '1' : x | x <- prev]
+> gray'' n = [ '0' : x | x <- prev] ++ [ '1' : x | x <- reverse prev]
 >   where 
 >     prev = gray'' (n-1)
 
@@ -50,3 +50,14 @@ That is, we add 0 and 1 as heads.
   *Prob49> grayr 4
   ["0000","1000","0100","1100","0010","1010","0110","1110"
   ,"0001","1001","0101","1101","0011","1011","0111","1111"]
+
+  *Prob49> length $ gray 23
+  8388608
+  (4.19 secs, 1,476,486,832 bytes)
+  *Prob49> length $ grayr 23
+  8388608
+  (2.27 secs, 1,744,928,600 bytes)
+  *Prob49> length $ gray'' 23
+  8388608
+  (4.20 secs, 2,550,232,496 bytes)
+

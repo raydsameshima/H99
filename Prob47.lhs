@@ -11,3 +11,14 @@ Define operator precedence as usual; i.e. as in Java.
 > import Prob46
 
 Nothing to do.
+
+  *Prob47> table (\a b -> (and' a (or' a b)))
+  True  True  True 
+  True  False True 
+  False True  False
+  False False False
+  *Prob47> table (\a b -> (a `and'` (a `or'` b)))
+  True  True  True 
+  True  False True 
+  False True  False
+  False False False

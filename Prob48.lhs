@@ -34,16 +34,17 @@ A trial-generalized-boolean function:
 >   mapM_ putStrLn [ toStr a ++ " => " ++ show (f a) 
 >                  | a <- args n
 >                  ]
->     where
->       args :: Int -> [[Bool]]
->       args n = replicateM n [True, False]
+> --    where
+> args :: Int -> [[Bool]]
+> args n = replicateM n [True, False]
 >
->       toStr :: [Bool] -> String
->       toStr = unwords . map (\x -> show x ++ space x)
->
->       space :: Bool -> String
->       space True  = "  "
->       space False = " "
+> toStr :: [Bool] -> String
+> toStr = unwords . map f 
+>   where
+>     f x = show x ++ space x
+>     space :: Bool -> String
+>     space True  = "  "
+>     space False = " "
 
   *Prob48> tableN 3 gbf 
   True   True   True   => True
@@ -73,6 +74,7 @@ To replace args n, without using replicateM:
 >   mapM_ putStrLn [ toStr a ++ " => " ++ show (f a) 
 >                  | a <- bTable n
 >                  ]
+> {-
 >     where
 >       toStr :: [Bool] -> String
 >       toStr = unwords . map (\x -> show x ++ space x)
@@ -80,6 +82,7 @@ To replace args n, without using replicateM:
 >       space :: Bool -> String
 >       space True  = "  "
 >       space False = " "
+> -}
 
   *Prob48> tableN 3 (\[a,b,c] -> (a && (b || c)) == (a && b) || (a && c))
   True   True   True   => True
