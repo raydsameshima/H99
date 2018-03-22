@@ -30,7 +30,7 @@ Using foldr with cons (:) which faster (O(n) v.s. O(n^2)).
 
 > insertAt'' 
 >   :: a -> [a] -> Int -> [a]
-> insertAt'' y xs n = foldr helper [] $ xs'
+> insertAt'' y xs n = foldr helper [] xs'
 >   where
 >     xs' = zip xs [1..]
 >     helper (x, i) xs
