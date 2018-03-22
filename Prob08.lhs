@@ -44,7 +44,7 @@ but Maybe does not come up the final result!
 
 > compressF :: (Eq a) => [a] -> [a]
 > -- compressF xs = foldr f (const []) xs Nothing
-> compressF xs = foldr f (const []) xs $ Nothing
+> compressF xs = foldr f (const []) xs Nothing
 >   where
 >     f :: (Eq a) => 
 >          a -> (Maybe a -> [a]) -> (Maybe a -> [a])  

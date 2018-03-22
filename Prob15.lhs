@@ -8,7 +8,7 @@ Replicate the elements of a list a given number of times.
 > repli 
 >   :: [a] -> Int -> [a]
 > repli []     _ = []
-> repli [x]    n = take n (repeat x)
+> repli [x]    n = replicate n x
 > repli (x:xs) n = (repli [x] n) ++ (repli xs n) 
 
   repli xs n = concatMap (replicate n) xs
