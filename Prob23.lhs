@@ -81,17 +81,16 @@ and for applicative style,
 
 > rollDices, rollDices' 
 >   :: IO [Int]
-> rollDices = do
->   g <- newStdGen
->   return (randomRs (1,6) g)
+> -- rollDices = do
+> --   g <- newStdGen
+> --   return (randomRs (1,6) g)
+> rollDices = randomRs (1, 6) <$> newStdGen
 >
 > rollDices' = randomRs (1,6) <$> newStdGen -- using applicative style
 >
 > rollDicesN, rollDicesN' 
 >   :: Int -> IO [Int]
-> rollDicesN n = do
->   rs <- rollDices'
->   return (take n rs)
+> rollDicesN n = take n <$> rollDices'
 >
 > rollDicesN' n = take n . randomRs (1,6) <$> newStdGen
 
