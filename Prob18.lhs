@@ -21,4 +21,4 @@ A solution using list comprehension:
 
 > slice'' 
 >   :: [a] -> Int -> Int -> [a]
-> slice'' xs i k = fst $ unzip $ filter ((>= i) . snd) $ zip xs [1..k]
+> slice'' xs i k = map fst $ filter ((>= i) . snd) $ zip xs [1 .. k]
