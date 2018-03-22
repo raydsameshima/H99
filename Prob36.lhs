@@ -14,8 +14,8 @@ Construct a list containing the prime factors and their multiplicity.
 > primeFactorsMult n = zip factors' powers
 >   where
 >     factors  = primeFactors n
->     factors' = map head $ group $ factors 
->     powers   = map length $ group $ factors 
+>     factors' = map head $ group factors 
+>     powers   = map length $ group factors 
 
   *Prob36> primeFactorsMult 315
   [(3,2),(5,1),(7,1)]
