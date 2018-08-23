@@ -46,7 +46,7 @@ From the solution,
 >       EQ -> t
 > 
 > construct :: (Ord a) => [a] -> Tree a
-> construct xs = foldl (flip add2Tree) Empty xs
+> construct = foldl (flip add2Tree) Empty
 
   *Prob57> isSym . consTree $ [5, 3, 18, 1, 4, 12, 21]
   True
