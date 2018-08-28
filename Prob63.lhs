@@ -1,6 +1,7 @@
 Prob63.lhs
 
 > module Prob63 where
+
 > import Prob54(Tree(..))
 > import Prob62(atLevel)
 
@@ -10,6 +11,7 @@ Prob63.lhs
 >                     (Branch 2 Empty Empty)
 
 Construct a complete binary tree
+(See also https://xlinux.nist.gov/dads/HTML/completeBinaryTree.html)
 
 A complete binary tree with height H is defined as follows:
 
@@ -23,24 +25,77 @@ For every node X with address A the following property holds:
 The address of X's left and right successors are 2*A and 2*A+1, respectively, if they exist. 
 This fact can be used to elegantly construct a complete binary tree structure.
 
-> completeBinaryTree = cbt 'x'
->
-> cbt :: a -> Int -> Tree a
-> cbt = undefined
+> aTestTree = Branch 'x' (Branch 'x' Empty Empty) (Branch 'x' Empty Empty)
 
-> countDepth :: Tree a -> Int
-> countDepth Empty          = 0
-> countDepth (Branch _ r l) = 1 + max (countDepth r) (countDepth l)
->
-> isCompleteBinaryTree :: Tree a -> Bool
-> isCompleteBinaryTree tree = undefined
->
-> isFullAt :: Tree a -> Int -> Bool
-> isFullAt t n 
->   | n <= 0             = True
->   | n > (countDepth t) = False
->   | otherwise          = 2^(n-1) == length (atLevel t n)
->
-> isFull :: Tree a -> Bool
-> isFull t = and [isFullAt t n| n <- [0.. (countDepth t)]]
+The follwoing implementation is from
+  
+  "...  a node at index i has children at indexes 2i and 2i+1 ..."
+  https://xlinux.nist.gov/dads/HTML/completeBinaryTree.html
+
+> cbt 
+>   :: Int -> Tree Char
+> cbt n = f 1
+>   where
+>     f :: Int -> Tree Char
+>     f i
+>       | i > n     = Empty
+>       | otherwise = Branch 'x' (f $ 2*i)
+>                                (f $ 2*i + 1)
+
+*Prob63> cbt 12
+Branch 'x' (Branch 'x' (Branch 'x' (Branch 'x' Empty Empty) 
+                                   (Branch 'x' Empty Empty)) 
+                       (Branch 'x' (Branch 'x' Empty Empty) 
+                                   (Branch 'x' Empty Empty))) 
+           (Branch 'x' (Branch 'x' (Branch 'x' Empty Empty) 
+                                   Empty) 
+                       (Branch 'x' Empty 
+                                   Empty))
+Since
+  2^0 < 2^1 < 2^2 < 2^3 < 12 < 2^4
+the steps of internal recursion will be
+  f 1
+    =
+  Branch 'x' (f 2)
+             (f 3)
+    =
+  Branch 'x' (Branch 'x' (f 4)
+                         (f 5))
+             (Branch 'x' (f 6)
+                         (f 7))
+    =
+  Branch 'x' (Branch 'x' (Branch 'x' (f 8)   --> (Branch 'x' Empty Empty)
+                                     (f 9))  --> (Branch 'x' Empty Empty) 
+                         (Branch 'x' (f 10)  --> (Branch 'x' Empty Empty) 
+                                     (f 11)) --> (Branch 'x' Empty Empty)
+             (Branch 'x' (Branch 'x' (f 12)  --> (Branch 'x' Empty Empty)
+                                     (f 13)) --> Empty
+                         (Branch 'x' (f 14)  --> Empty
+                                     (f 15)) --> Empty
+
+That is, the i's are the indices, in a sense:
+
+> cbt' n = f 1
+>   where
+>     f :: Int -> Tree Int
+>     f i
+>       | i > n     = Empty
+>       | otherwise = Branch i (f $ 2*i)
+>                              (f $ 2*i + 1)
+
+*Prob63> cbt' 12
+Branch 1 (Branch 2 (Branch 4 (Branch 8 Empty Empty) 
+                             (Branch 9 Empty Empty)) 
+                   (Branch 5 (Branch 10 Empty Empty) 
+                             (Branch 11 Empty Empty))) 
+         (Branch 3 (Branch 6 (Branch 12 Empty Empty) 
+                             Empty) 
+                   (Branch 7 Empty 
+                             Empty))
+
+
+> -- nodeOf :: Tree a -> Maybe a
+> -- nodeOf Empty    = Nothing
+> -- nodeOf $ Tree x = Just x
+
 
