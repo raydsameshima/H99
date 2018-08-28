@@ -14,7 +14,8 @@ Collect the internal nodes of a binary tree in a list
 An internal node of a binary tree has either one or two non-empty successors. 
 Write a predicate internals/2 to collect them in a list.
 
-> internals :: Tree a -> [a]
+> internals, internals'
+>   :: Tree a -> [a]
 > internals Empty = []
 > internals (Branch _ Empty Empty) = []
 > internals (Branch x leftT righT) = x:(internals leftT)++(internals righT)
@@ -38,7 +39,8 @@ Collect the nodes at a given level in a list
 A node of a binary tree is at level N if the path from the root to the node has length N-1. 
 The root node is at level 1. Write a predicate atlevel/3 to collect all nodes at a given level in a list.
 
-> atLevel :: Tree a -> Int -> [a]
+> atLevel
+>   :: Tree a -> Int -> [a]
 > atLevel _ n 
 >   | n <= 0 = []
 > atLevel Empty          _ = []
