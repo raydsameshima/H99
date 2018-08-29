@@ -93,9 +93,40 @@ Branch 1 (Branch 2 (Branch 4 (Branch 8 Empty Empty)
                    (Branch 7 Empty 
                              Empty))
 
+> splitTree 
+>   :: Tree a -> (Maybe a, [Tree a]) 
+> splitTree Empty                  = (Nothing, [])
+> splitTree (Branch x Empty Empty) = (Just x,  [])
+> splitTree (Branch x l     r    ) = (Just x,  [l,r])
 
-> -- nodeOf :: Tree a -> Maybe a
-> -- nodeOf Empty    = Nothing
-> -- nodeOf $ Tree x = Just x
+> downStirs 
+>   :: Tree a -> [Tree a]
+> downStirs t = list
+>   where
+>     (_, list) = splitTree t
 
+*Prob63> let f = concat . map downStirs 
+*Prob63> tree4
+Branch 1 (Branch 2 Empty (Branch 4 Empty Empty)) (Branch 2 Empty Empty)
+*Prob63> f [tree4]
+[Branch 2 Empty (Branch 4 Empty Empty),Branch 2 Empty Empty]
+*Prob63> f it
+[Empty,Branch 4 Empty Empty]
+*Prob63> f it
+[]
+ 
+> bottomOfTree' :: (Eq a) => [Tree a] -> [Tree a]
+> bottomOfTree' ts = if f ts == [] then ts else bottomOfTree' (f ts)
+>   where
+>     f = concat . map downStirs
+>
+> bottomOfTree t = bottomOfTree' [t]
 
+> {-
+> flatten :: Tree a -> [[a]]
+> flatten (Branch x Empty Empty) = [[x]]
+> flatten t = [h] : (concat . map downStirs $ rest)
+>   where
+>     Branch h _ _ = t
+>     rest = downStirs t 
+> -}
