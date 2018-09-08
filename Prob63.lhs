@@ -2,13 +2,21 @@ Prob63.lhs
 
 > module Prob63 where
 
+> import Data.List (group)
+> import Test.QuickCheck
+
 > import Prob54(Tree(..))
 > import Prob62(atLevel)
 
-> tree4 = Branch 1 (Branch 2 Empty (Branch 4 Empty Empty))
->                  (Branch 2 Empty Empty)
-> fullTree = Branch 1 (Branch 2 Empty Empty)
->                     (Branch 2 Empty Empty)
+> tree4 = Branch 1 (Branch 2 Empty 
+>                            (Branch 4 Empty 
+>                                      Empty))
+>                  (Branch 2 Empty 
+>                            Empty)
+> fullTree = Branch 1 (Branch 2 Empty 
+>                               Empty)
+>                     (Branch 2 Empty 
+>                               Empty)
 
 Construct a complete binary tree
 (See also https://xlinux.nist.gov/dads/HTML/completeBinaryTree.html)
@@ -75,6 +83,8 @@ the steps of internal recursion will be
 
 That is, the i's are the indices, in a sense:
 
+> cbt'
+>   :: Int -> Tree Int
 > cbt' n = f 1
 >   where
 >     f :: Int -> Tree Int
@@ -93,40 +103,56 @@ Branch 1 (Branch 2 (Branch 4 (Branch 8 Empty Empty)
                    (Branch 7 Empty 
                              Empty))
 
-> splitTree 
->   :: Tree a -> (Maybe a, [Tree a]) 
-> splitTree Empty                  = (Nothing, [])
-> splitTree (Branch x Empty Empty) = (Just x,  [])
-> splitTree (Branch x l     r    ) = (Just x,  [l,r])
+Let us follow the solution:
 
-> downStirs 
->   :: Tree a -> [Tree a]
-> downStirs t = list
+> isCBT 
+>   :: Tree a -> Bool
+> isCBT Empty = True
+> isCBT t = and $ lastProper : zipWith (==) lengths powers
 >   where
->     (_, list) = splitTree t
-
-*Prob63> let f = concat . map downStirs 
-*Prob63> tree4
-Branch 1 (Branch 2 Empty (Branch 4 Empty Empty)) (Branch 2 Empty Empty)
-*Prob63> f [tree4]
-[Branch 2 Empty (Branch 4 Empty Empty),Branch 2 Empty Empty]
-*Prob63> f it
-[Empty,Branch 4 Empty Empty]
-*Prob63> f it
-[]
- 
-> bottomOfTree' :: (Eq a) => [Tree a] -> [Tree a]
-> bottomOfTree' ts = if f ts == [] then ts else bottomOfTree' (f ts)
->   where
->     f = concat . map downStirs
+>     lengths, powers :: [Int]
+>     lengths = map (length . filter id) $ init $ levels' t
+>     powers = [2^n | n <- [0..]] -- infinite !
 >
-> bottomOfTree t = bottomOfTree' [t]
+>     lastProper :: Bool
+>     lastProper = head (lastFilled' t) && (length (lastFilled' t)) < 3
 
-> {-
-> flatten :: Tree a -> [[a]]
-> flatten (Branch x Empty Empty) = [[x]]
-> flatten t = [h] : (concat . map downStirs $ rest)
+levels' returns the tree structure in list where Empty becomes False:
+
+> levels' 
+>   :: Tree a -> [[Bool]]
+> levels' = takeWhile or . filled 
 >   where
->     Branch h _ _ = t
->     rest = downStirs t 
-> -}
+>     filled -- infinite sequence ! 
+>       :: Tree a -> [[Bool]]
+>     filled Empty = repeat [False]
+>     filled (Branch _ l r) = [True] : zipWith (++) (filled l) (filled r)
+
+*Prob63 Turtle> levels' tree4 
+[[True],[True,True],[False,True,False,False]]
+
+tree4 = Branch 1 (Branch 2 Empty 
+                           (Branch 4 Empty 
+                                     Empty))
+                 (Branch 2 Empty 
+                           Empty)
+
+For CBT, the last list of (levels' t) must be the following form:
+  [True .. True, False .. False]
+so, lastFilled' returns either 
+  [True, False] or [True]
+for CBT.
+
+> lastFilled' 
+>   :: Tree a -> [Bool]
+> lastFilled' = map head . group . last . levels'
+
+
+QuickCheck: 
+Since the following function should be True-const:
+
+> prop_isCBT n = isCBT . cbt' 
+
+*Prob63 Turtle> quickCheck prop_isCBT 
++++ OK, passed 100 tests.
+
