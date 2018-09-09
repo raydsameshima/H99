@@ -6,7 +6,6 @@ Prob63.lhs
 > import Test.QuickCheck
 
 > import Prob54(Tree(..))
-> import Prob62(atLevel)
 
 > tree4 = Branch 1 (Branch 2 Empty 
 >                            (Branch 4 Empty 
