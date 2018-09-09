@@ -104,19 +104,6 @@ Branch 1 (Branch 2 (Branch 4 (Branch 8 Empty Empty)
                              Empty))
 
 Let us follow the solution:
-
-> isCBT 
->   :: Tree a -> Bool
-> isCBT Empty = True
-> isCBT t = and $ lastProper : zipWith (==) lengths powers
->   where
->     lengths, powers :: [Int]
->     lengths = map (length . filter id) $ init $ levels' t
->     powers = [2^n | n <- [0..]] -- infinite !
->
->     lastProper :: Bool
->     lastProper = head (lastFilled' t) && (length (lastFilled' t)) < 3
-
 levels' returns the tree structure in list where Empty becomes False:
 
 > levels' 
@@ -137,7 +124,7 @@ tree4 = Branch 1 (Branch 2 Empty
                  (Branch 2 Empty 
                            Empty)
 
-For CBT, the last list of (levels' t) must be the following form:
+For a CBT, the last list of (levels' t) must be the following form:
   [True .. True, False .. False]
 so, lastFilled' returns either 
   [True, False] or [True]
@@ -147,7 +134,33 @@ for CBT.
 >   :: Tree a -> [Bool]
 > lastFilled' = map head . group . last . levels'
 
+Therefore, the bottom of a CBT t has True at the head in (lastFilled' t) 
+and (lastFilled' t) is either sigleton or two elements (see above).
 
+> lastProper'
+>   :: Tree a ->  Bool
+> lastProper' t = head (lastFilled' t) && length (lastFilled' t) < 3
+
+Equipped with these helper functions, isCBT is the following form:
+
+> isCBT 
+>   :: Tree a -> Bool
+> isCBT Empty = True
+> isCBT t = and $ (lastProper' t) : zipWith (==) lengths powers
+>   where
+>     lengths, powers :: [Int]
+>     lengths = map (length . filter id) $ init $ levels' t
+>     powers = [2^n | n <- [0..]] -- infinite !
+
+lengths is the numbers of non-empty nodes of each depth (but the lowest).
+Since we've already replaced all non-empty element by True (by levels'),
+we can simply filter them by the elements.
+So this implementation is basically, when both
+  the bottom is left-aligned 
+and
+  the rest parts is complete binary tree
+then returns True, otherwise False.
+  
 QuickCheck: 
 Since the following function should be True-const:
 
