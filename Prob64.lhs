@@ -78,19 +78,49 @@ Let us start mimic the levels' from Prob63:
 ,[Nothing, Nothing, Just 'e',Nothing,Nothing,Nothing, Nothing,Nothing, Nothing,Nothing,Nothing,Nothing]
 ]
 
-> inOrder :: [[Maybe a]] -> [Maybe a]
+So we can assign the depth:
+
+*Prob64 Turtle> zipWith (\n ts -> [(n, t) | t <- ts]) [1..] it
+[[(1,Just 'n')]
+,[(2,Just 'k'),(2,Just 'u')]
+,[(3,Just 'c'),(3,Just 'm'),(3,Just 'p'),(3,Nothing)]
+,[(4,Just 'a'),(4,Just 'h'),(4,Nothing),(4,Nothing),(4,Nothing),(4,Just 's'),(4,Nothing)]
+,[(5,Nothing),(5,Nothing),(5,Just 'g'),(5,Nothing),(5,Nothing),(5,Nothing),(5,Nothing),(5,Just 'q'),(5,Nothing),(5,Nothing)]
+,[(6,Nothing),(6,Nothing),(6,Just 'e'),(6,Nothing),(6,Nothing),(6,Nothing),(6,Nothing),(6,Nothing),(6,Nothing),(6,Nothing),(6,Nothing),(6,Nothing)]
+]
+
+> depths :: Tree a -> [[Maybe (a, Int)]]
+> depths t = t'
+>   where
+>     t'' = zipWith (\n ts -> [(n,t) | t <- ts]) [1..] $ toList t
+>     t' = map (map helper) t''
+>     helper :: (Int, Maybe a) -> Maybe (a, Int)
+>     helper (_, Nothing) = Nothing
+>     helper (d, Just n)  = Just (n, d) 
+
+> inOrder 
+>   :: [[Maybe a]] -> [Maybe a]
 > inOrder [[x]] = [x]
 > inOrder [xs,ys] = (filter isJust $ inOrder' xs ys)
 > inOrder (xs:ys:zs) = inOrder $ filter isJust (inOrder' xs ys) : zs 
 
-> inOrder' :: [a] -> [a] -> [a]
+> inOrder' 
+>   :: [a] -> [a] -> [a]
 > inOrder' [] bs = bs
 > inOrder' as [] = as
 > inOrder' (a:as) (b:bs) = b:a: inOrder' as bs
 
-*Prob64 Turtle> inOrder . toList $ tree64 
-[Just 'a',Just 'c',Just 'e',Just 'g',Just 'h',Just 'k',Just 'm',Just 'n',Just 'p',Just 'q',Just 's',Just 'u']
+*Prob64 Turtle> zipWith (\x (Just (n,d)) -> Just (n,x,d)) [1..] . inOrder . depths $ tree64 
+[Just ('a',1,4),Just ('c',2,3),Just ('e',3,6),Just ('g',4,5),Just ('h',5,4),Just ('k',6,2),Just ('m',7,3),Just ('n',8,1),Just ('p',9,3),Just ('q',10,5),Just ('s',11,4),Just ('u',12,2)]
 
+> type X = Int
+> type Depth = Int
+> nodesAndCoordinates :: Tree a -> [(a, X, Depth)]
+> nodesAndCoordinates ts = map fromJust js
+>   where
+>     js = zipWith helper [1..] ts'
+>     helper x (Just (n,d)) = Just (n,x,d)
+>     ts' = inOrder . depths $ ts
 
 ... ok let us cheat.
 
@@ -106,6 +136,9 @@ Let us start mimic the levels' from Prob63:
 >         (l', x')  = aux x      (y+1) l
 >         (r', x'') = aux (x'+1) (y+1) r
 
+*Prob64 Turtle> nodesAndCoordinates tree64 
+[('a',1,4),('c',2,3),('e',3,6),('g',4,5),('h',5,4),('k',6,2),('m',7,3),('n',8,1),('p',9,3),('q',10,5),('s',11,4),('u',12,2)]
 
-
+*Prob64 Turtle> layout tree64 
+Branch ('n',(8,1)) (Branch ('k',(6,2)) (Branch ('c',(2,3)) (Branch ('a',(1,4)) Empty Empty) (Branch ('h',(5,4)) (Branch ('g',(4,5)) (Branch ('e',(3,6)) Empty Empty) Empty) Empty)) (Branch ('m',(7,3)) Empty Empty)) (Branch ('u',(12,2)) (Branch ('p',(9,3)) Empty (Branch ('s',(11,4)) (Branch ('q',(10,5)) Empty Empty) Empty)) Empty)
 
